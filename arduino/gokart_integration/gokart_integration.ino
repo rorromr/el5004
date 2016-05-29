@@ -1,37 +1,29 @@
-#include "Arduino.h"
 #include "DynamixelSerial1.h"
-#include "rf_interface.h"
-#include "brake.h" 
+#include "gokart.h"
 
 // Dynamixel protocol
 #define GOKART_DXL_BAUDRATE 200000
 #define GOKART_DXL_CTRL_PIN 2
 
-GoKart::RFInterface rf(3);
-
-GoKart::Brake brake(Dynamixel, 5);
+GoKart::GoKartHW gokart(Dynamixel);
 
 void setup()
 {
   Dynamixel.begin(GOKART_DXL_BAUDRATE,GOKART_DXL_CTRL_PIN);
-  brake.config(100, 200, 50);
-  
-  rf.addChannel(1,6); // Channel 1 connected on 6 pin
-  rf.addChannel(2,7); // Channel 2 connected on 7 pin
-  rf.addChannel(3,8); // Channel 3 connected on 8 pin
+  gokart.init();
 }
 
 void loop()
 {
-  rf.update();
+  gokart.rf.update();
   // Print values
-  Serial.print("Ch1: "); Serial.println(rf.getChannel(1));
-  Serial.print("Ch2: "); Serial.println(rf.getChannel(2));
-  Serial.print("Ch3: "); Serial.println(rf.getChannel(3));
+  Serial.print("Ch1: "); Serial.println(gokart.rf.getChannel(1));
+  Serial.print("Ch2: "); Serial.println(gokart.rf.getChannel(2));
+  Serial.print("Ch3: "); Serial.println(gokart.rf.getChannel(3));
 
-  brake.full();
+  gokart.brake.full();
   delay(1500);
-  brake.release();
+  gokart.brake.release();
   delay(1500);
 }
 
