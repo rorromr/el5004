@@ -1,23 +1,37 @@
 # Código para Arduino
 
-Plataforma: Arduino Mega 2560
+La plataforma de desarrollo corresponde a Arduino Mega 2560.
 
-El software se ha estructurado como una librería de Arduino.
+El software se ha estructurado como una librería de Arduino. Para más información ver [librerías de Arduino]( https://www.arduino.cc/en/Guide/Libraries).
 
-## Dependencias
+El directorio para la instalación de librerías de Arduino suele ser:
+* Linux: `~/Arduino/libraries`
+* OS X: `Documents/Arduino/libraries`
+* Windows: `My Documents\Arduino\libraries`
 
-### Librería Dynamixel
+## Librerías
+
+### Dynamixel
 
 Esta librería emplea la conexión serial 1 de Arduino Mega (TX1, RX1). El pin usado para cambiar la dirección de comunicación es configurado en el método `begin` de la librería. 
 
 #### Instalación
+
 Copiar el directorio `DynamixelSerial1` en `~/Arduino/libraries`
 
-## Instalación
+### GoKart
 
-Copiar el directorio `GoKart` en `~/Arduino/libraries`
+Contiene el código para el control del vehiculo GoKart.
 
-## Ejemplos
-
-El directorio `~/Arduino/libraries/GoKart/examples` contiene una serie de ejemplos. 
+```
+arduino
+|
++-- GoKart [Librería principal]
+|   |
+|   +-- examples
+|       |-- dynamixel_test [Test de motores Dynamixel]
+|       |-- rf_test [Test de comunicación RF]
+|       |-- gokart_integration [Desarrollo de software principal]
+|
+```
 
