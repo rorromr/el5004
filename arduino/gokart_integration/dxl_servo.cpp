@@ -26,6 +26,11 @@ namespace GoKart
     // Move servo using lib
     dxl_->move(id_,encoder_target);
   }
+
+  void DxlServo::moveToZero()
+  {
+    dxl_->move(id_,zero_);
+  }
   
 }
 

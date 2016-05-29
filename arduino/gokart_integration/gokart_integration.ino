@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "DynamixelSerial1.h"
 #include "rf_interface.h"
-#include "dxl_servo.h" 
+#include "brake.h" 
 
 // Dynamixel protocol
 #define GOKART_DXL_BAUDRATE 200000
@@ -9,7 +9,7 @@
 
 GoKart::RFInterface rf(3);
 
-GoKart::DxlServo brake(Dynamixel, 5);
+GoKart::Brake brake(Dynamixel, 5);
 
 void setup()
 {
@@ -28,5 +28,10 @@ void loop()
   Serial.print("Ch1: "); Serial.println(rf.getChannel(1));
   Serial.print("Ch2: "); Serial.println(rf.getChannel(2));
   Serial.print("Ch3: "); Serial.println(rf.getChannel(3));
+
+  brake.full();
+  delay(1500);
+  brake.release();
+  delay(1500);
 }
 

@@ -24,8 +24,10 @@ namespace GoKart
       void config(const uint16_t min, const uint16_t max, const uint16_t zero);
 
       void move(const int16_t target);
+
+      void moveToZero();
   
-    private:
+    protected:
       // Dynamixel lib
       DynamixelClass* dxl_;
 
