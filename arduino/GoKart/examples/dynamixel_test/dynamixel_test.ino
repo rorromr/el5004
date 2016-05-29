@@ -24,7 +24,7 @@ void loop()
   // Print values
   Serial.print(voltage);
   Serial.print(" | ");
-  Serial.print(position);
+  Serial.println(position);
   
   delay(1000);
 }
