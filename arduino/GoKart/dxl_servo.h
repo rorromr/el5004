@@ -12,9 +12,22 @@
 
 #include <DynamixelSerial1.h>
 #include <stdint.h>
+#include "error_code.h"
 
 namespace GoKart
 {
+  /// Dynamixel servo error definition
+  typedef enum {
+    ///< No error
+    DXL_SERVO_OK            = HW_STATUS_OK,
+    ///< Not found
+    DXL_SERVO_NOT_FOUND     = HW_STATUS_ERROR | (1 << 1),
+
+    DXL_SERVO_MAX_ANGLE_CW  = HW_STATUS_ERROR | (2 << 1),
+
+    DXL_SERVO_MAX_ANGLE_CWW = HW_STATUS_ERROR | (3 << 1)
+  } dxl_status_type;
+
   class DxlServo
   {
     public:
@@ -39,6 +52,9 @@ namespace GoKart
       uint16_t max_;
       // Zero position
       uint16_t zero_;
+
+      // Error status
+      hw_status status_;
   };
 }
 

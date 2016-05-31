@@ -7,9 +7,9 @@ namespace GoKart
     dxl_(&dxl),
     id_(id)
   {
+    set_error(&status_, DXL_SERVO_OK);
     // @TODO
     // Assert dxl null
-    ;
   }
 
   void DxlServo::config(const uint16_t min, const uint16_t max, const uint16_t zero)
