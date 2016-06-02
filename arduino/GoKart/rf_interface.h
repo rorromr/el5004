@@ -14,8 +14,15 @@
 #define RF_INTERFACE_H
 
 #include <stdint.h>
+#include "gokart_msgs.h"
 
 #define RF_INTERFACE_MAX_CH 8
+
+// RF
+#define GOKART_RF_CH_NUM 3
+#define GOKART_RF_CH1_PIN 5
+#define GOKART_RF_CH2_PIN 6
+#define GOKART_RF_CH3_PIN 7
 
 namespace GoKart
 {
@@ -33,16 +40,17 @@ namespace GoKart
        * 
        * @return True if the channel was successfully added
        */
-      inline bool addChannel(const uint8_t ch, const uint8_t port)
+      /*inline bool addChannel(const uint8_t ch, const uint8_t port)
       {
         ports_[ch] = port;
       }
-  
+      /*
+      
       /**
        * @brief Update all channels.
        * Usually you call this method in your control loop.
        */
-      void update() const;
+      void update();
   
       /**
        * @brief Get last channel uptime.
@@ -55,6 +63,8 @@ namespace GoKart
       {
         return uptime_[ch];
       }
+
+      void getCommand (DataSerialization::GoKartCommand &command);
   
     private:
       // Total number of channels

@@ -13,11 +13,7 @@
 #define GOKART_THROTTLE_ID 3
 #define GOKART_STEERINGWHEEL_ID 4
 
-// RF
-#define GOKART_RF_CH_NUM 3
-#define GOKART_RF_CH1_PIN 6
-#define GOKART_RF_CH2_PIN 7
-#define GOKART_RF_CH3_PIN 8
+
 
 
 namespace GoKart
