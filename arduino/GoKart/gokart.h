@@ -1,7 +1,8 @@
 #include "brake.h"
 #include "steering_wheel.h" 
 #include "throttle.h" 
-#include "rf_interface.h" 
+#include "rf_interface.h"
+#include "gokart_msgs.h" 
 
 // Dynamixel protocol
 #define GOKART_DXL_BAUDRATE 200000
