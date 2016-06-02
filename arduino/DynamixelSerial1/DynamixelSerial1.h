@@ -180,7 +180,10 @@
 
 class DynamixelClass {
 private:
-	
+	uint8_t _triggerBit;
+	volatile uint8_t *_triggerOutput;
+	volatile uint8_t *_triggerMode;
+
 	unsigned char Checksum; 
 	unsigned char Direction_Pin;
 	unsigned char Time_Counter;
@@ -205,6 +208,19 @@ private:
 	
 public:
 	
+	inline void switchCom(uint8_t pin, uint8_t mode)
+	{
+		switch(mode)
+		{
+			case Tx_MODE:
+				*_triggerOutput |= _triggerBit;
+				break;
+			case Rx_MODE:
+				*_triggerOutput &= ~_triggerBit;
+				break;
+		}
+	}
+
 	void begin(long baud, unsigned char directionPin);
 	void begin(long baud);
 	void end(void);

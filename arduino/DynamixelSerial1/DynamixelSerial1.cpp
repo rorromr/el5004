@@ -85,7 +85,7 @@
 // Macro for Comunication Flow Control
 
 #define setDPin(DirPin,Mode)   (pinMode(DirPin,Mode))       // Select the Switch to TX/RX Mode Pin
-#define switchCom(DirPin,Mode) (digitalWrite(DirPin,Mode))  // Switch to TX/RX Mode
+//#define switchCom(DirPin,Mode) (digitalWrite(DirPin,Mode))  // Switch to TX/RX Mode
 
 
 // Private Methods //////////////////////////////////////////////////////////////
@@ -118,6 +118,11 @@ void DynamixelClass::begin(long baud, unsigned char directionPin)
 	Direction_Pin = directionPin;
 	setDPin(Direction_Pin,OUTPUT);
 	beginCom(baud);
+
+	_triggerBit = digitalPinToBitMask(directionPin);
+	_triggerOutput = portOutputRegister(digitalPinToPort(directionPin));
+	_triggerMode = (uint8_t *) portModeRegister(digitalPinToPort(directionPin)); 
+
 }	
 
 void DynamixelClass::begin(long baud)
