@@ -10,16 +10,14 @@
 #ifndef GOKART_COM_INTERFACE_H
 #define GOKART_COM_INTERFACE_H
 
+#include "gokart_msgs.h"
+
 namespace GoKart
 {
   class ComInterface
   {
-    public:
-      ComInterface();
-      
-      void getCmd();
-      
-      
+  public:
+    virtual void getCommand(DataSerialization::GoKartCommand& cmd) = 0;
   };
 }
 

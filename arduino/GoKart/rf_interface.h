@@ -15,6 +15,7 @@
 
 #include <stdint.h>
 #include "gokart_msgs.h"
+#include "com_interface.h"
 
 #define RF_INTERFACE_MAX_CH 8
 
@@ -26,7 +27,7 @@
 
 namespace GoKart
 {
-  class RFInterface
+  class RFInterface : public ComInterface
   {
     public:
   
@@ -64,7 +65,7 @@ namespace GoKart
         return uptime_[ch];
       }
 
-      void getCommand (DataSerialization::GoKartCommand &command);
+      virtual void getCommand(DataSerialization::GoKartCommand& cmd);
   
     private:
       // Total number of channels
