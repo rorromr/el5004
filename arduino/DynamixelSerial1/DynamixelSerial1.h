@@ -180,9 +180,8 @@
 
 class DynamixelClass {
 private:
-	uint8_t _triggerBit;
-	volatile uint8_t *_triggerOutput;
-	volatile uint8_t *_triggerMode;
+	uint8_t dataControlPinMask_;
+	volatile uint8_t *dataControlPinReg_;
 
 	unsigned char Checksum; 
 	unsigned char Direction_Pin;
@@ -208,15 +207,25 @@ private:
 	
 public:
 	
+	inline void setTx()
+	{
+		*dataControlPinReg_ |= dataControlPinMask_;
+	}
+
+	inline void setRx()
+	{
+		*dataControlPinReg_ &= ~dataControlPinMask_;
+	}
+
 	inline void switchCom(uint8_t pin, uint8_t mode)
 	{
 		switch(mode)
 		{
 			case Tx_MODE:
-				*_triggerOutput |= _triggerBit;
+				*dataControlPinReg_ |= dataControlPinMask_;
 				break;
 			case Rx_MODE:
-				*_triggerOutput &= ~_triggerBit;
+				*dataControlPinReg_ &= ~dataControlPinMask_;
 				break;
 		}
 	}
