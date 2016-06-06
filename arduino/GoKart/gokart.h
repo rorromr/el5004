@@ -1,7 +1,7 @@
 #include "brake.h"
 #include "steering_wheel.h" 
 #include "throttle.h" 
-#include "rf_interface.h"
+#include "ICommunication.h"
 #include "gokart_msgs.h" 
 
 // Dynamixel protocol
@@ -29,11 +29,15 @@ namespace GoKart
 
       void setEmergencyState();
 
+      void setRF();
+
+      //void setSerial();
+
     private:
       DynamixelClass* dxl_;
 
     public:
-      RFInterface rf;
+      ICommunication* com_;
       Brake brake;
       Throttle thr;
       SteeringWheel sw;

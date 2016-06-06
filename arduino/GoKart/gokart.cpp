@@ -4,12 +4,12 @@ namespace GoKart
 {
   GoKartHW::GoKartHW(DynamixelClass& dxl):
     dxl_(&dxl),
-    rf(GOKART_RF_CH_NUM),
     brake(dxl, GOKART_BRAKE_ID),
     thr(dxl, GOKART_THROTTLE_ID),
     sw(dxl, GOKART_STEERINGWHEEL_ID)
   {
-    ;
+    RFInterface rf(GOKART_RF_CH_NUM);
+    com_ = &rf;
   }
 
 
@@ -30,6 +30,20 @@ namespace GoKart
   {
     ;
   }
+
+  void setRF()
+  {
+    RFInterface rf(GOKART_RF_CH_NUM);
+    com_ = &rf;
+  }
+
+  /*
+  void setSerial()
+  {
+    SerialInterface se();
+    com_ = &se;
+
+  }*/
 
 }
 

@@ -9,17 +9,17 @@ GoKart::GoKartHW gokart(Dynamixel);
 
 void setup()
 {
-  Dynamixel.begin(GOKART_DXL_BAUDRATE, GOKART_DXL_CTRL_PIN);
+  Dynamixel.begin(GOKART_DXL_BAUDRATE,GOKART_DXL_CTRL_PIN);
   gokart.init();
 }
 
 void loop()
 {
-  gokart.com_->update();
+  gokart.rf.update();
   // Print values
-  Serial.print("Ch1: "); Serial.println(gokart.com_->getChannel(1));
-  Serial.print("Ch2: "); Serial.println(gokart.com_->getChannel(2));
-  Serial.print("Ch3: "); Serial.println(gokart.com_->getChannel(3));
+  Serial.print("Ch1: "); Serial.println(gokart.rf.getChannel(1));
+  Serial.print("Ch2: "); Serial.println(gokart.rf.getChannel(2));
+  Serial.print("Ch3: "); Serial.println(gokart.rf.getChannel(3));
 
   gokart.brake.full();
   delay(1500);

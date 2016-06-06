@@ -14,20 +14,17 @@
 #define RF_INTERFACE_H
 
 #include <stdint.h>
-#include "gokart_msgs.h"
-#include "com_interface.h"
 
-#define RF_INTERFACE_MAX_CH 8
-
-// RF
+ // RF
 #define GOKART_RF_CH_NUM 3
 #define GOKART_RF_CH1_PIN 5
 #define GOKART_RF_CH2_PIN 6
 #define GOKART_RF_CH3_PIN 7
+#define RF_INTERFACE_MAX_CH 8
 
 namespace GoKart
 {
-  class RFInterface : public ComInterface
+  class RFInterface: public ICommunication
   {
     public:
   
@@ -65,7 +62,9 @@ namespace GoKart
         return uptime_[ch];
       }
 
-      virtual void getCommand(DataSerialization::GoKartCommand& cmd);
+      void getCommand(DataSerialization::GoKartCommand& cmd);
+
+      virtual ~RFInterface();
   
     private:
       // Total number of channels
