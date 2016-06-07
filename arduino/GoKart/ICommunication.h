@@ -1,6 +1,6 @@
 /**
  * @brief Communication interface
- * @author Rodrigo Muñoz
+ * @author David Gomez
  * @date 2016
  *
  * @TODO
@@ -14,10 +14,14 @@
 
 namespace GoKart
 {
-  class ComInterface
+  class ICommunication
   {
-  public:
-    virtual void getCommand(DataSerialization::GoKartCommand& cmd) = 0;
+    public:
+
+    	virtual void update() = 0;
+
+    	virtual void getCommand(DataSerialization::GoKartCommand& cmd) = 0;
+
   };
 }
 

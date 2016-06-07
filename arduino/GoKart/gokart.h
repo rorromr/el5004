@@ -1,8 +1,10 @@
 #include "brake.h"
-#include "steering_wheel.h" 
-#include "throttle.h" 
+#include "steering_wheel.h"
+#include "throttle.h"
+#include "ICommunication.h"
 #include "rf_interface.h"
-#include "gokart_msgs.h" 
+#include "gokart_msgs.h"
+#include "Arduino.h"
 
 // Dynamixel protocol
 #define GOKART_DXL_BAUDRATE 200000
@@ -21,25 +23,31 @@ namespace GoKart
   class GoKartHW
   {
     public:
-      GoKartHW(DynamixelClass& dxl);
+      GoKartHW(DynamixelClass& dxl, ICommunication &com);
 
       void init();
-      
+
       uint8_t getErrorCode();
 
       void setEmergencyState();
+
+      void setCommunication(ICommunication &com);
+
+      void updateCommand();
+
+      void printCommand();
+
+      //void setSerial();
 
     private:
       DynamixelClass* dxl_;
 
     public:
-      RFInterface rf;
+      ICommunication* com_;
+      DataSerialization::GoKartCommand cmd_;
       Brake brake;
       Throttle thr;
       SteeringWheel sw;
 
   };
 }
-
-
-

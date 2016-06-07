@@ -14,17 +14,15 @@
 #define RF_INTERFACE_H
 
 #include <stdint.h>
-#include "gokart_msgs.h"
-#include "com_interface.h"
+#include "ICommunication.h"
 
-#define RF_INTERFACE_MAX_CH 8
-
-// RF
+ // RF
 #define GOKART_RF_CH_NUM 3
 
 #define GOKART_RF_CH1_PIN 5
 #define GOKART_RF_CH2_PIN 6
 #define GOKART_RF_CH3_PIN 7
+#define RF_INTERFACE_MAX_CH 8
 
 #define GOKART_RF_EMERGENCY_MIN 900
 #define GOKART_RF_EMERGENCY_MAX 1800
@@ -39,9 +37,10 @@
 
 namespace GoKart
 {
-  class RFInterface : public ComInterface
+  class RFInterface: public ICommunication
   {
     public:
+      RFInterface(const uint8_t ch_num);
 
       /**
        * @brief Update all channels.

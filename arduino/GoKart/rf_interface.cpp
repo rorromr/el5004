@@ -32,6 +32,8 @@ namespace GoKart
 
   void RFInterface::getCommand(DataSerialization::GoKartCommand& cmd)
   {
+    update(); //Updatea canales del transmisor
+
     //Stwheel match
     int medium_stwheel= round((GOKART_RF_STWHEEL_MIN + GOKART_RF_STWHEEL_MAX)/2);
     int left_max= medium_stwheel - round(GOKART_RF_STWHEEL_DELTA/2);
@@ -39,8 +41,8 @@ namespace GoKart
     if (uptime_[0]<= left_max){
       cmd.stwheel.data = uptime_[0]<GOKART_RF_STWHEEL_MIN ? (uint8_t) -128 : (uint8_t) map(uptime_[0], GOKART_RF_STWHEEL_MIN, left_max, -128, 0);
     }
-    else if (uptime_[0]>= throttle_min){
-      cmd.stwheel.data = uptime_[0]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 128 : (uint8_t) map(uptime_[0], throttle_min, GOKART_RF_STWHEEL_MAX, 0, 128);
+    else if (uptime_[0]>= right_min){
+      cmd.stwheel.data = uptime_[0]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 128 : (uint8_t) map(uptime_[0], right_min, GOKART_RF_STWHEEL_MAX, 0, 128);
     }
     else{
       cmd.stwheel.data = (uint8_t) 0;
