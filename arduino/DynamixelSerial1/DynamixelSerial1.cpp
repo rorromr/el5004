@@ -529,15 +529,15 @@ int DynamixelClass::readPosition(unsigned char ID)
 
 int DynamixelClass::readCWLimit(unsigned char ID)
 {   
-    Checksum = (~(ID + AX_CCW_CW_LENGTH  + AX_READ_DATA + AX_CCW_ANGLE_LIMIT_L + AX_BYTE_READ_POS))&0xFF;
+    Checksum = (~(ID + AX_POS_LENGTH  + AX_READ_DATA + AX_CW_ANGLE_LIMIT_L + AX_BYTE_READ_POS))&0xFF;
   
     setTx();
     sendData(AX_START);
     sendData(AX_START);
     sendData(ID);
-    sendData(AX_CCW_CW_LENGTH);
+    sendData(AX_POS_LENGTH);
     sendData(AX_READ_DATA);
-    sendData(AX_CCW_ANGLE_LIMIT_L);
+    sendData(AX_CW_ANGLE_LIMIT_L);
     sendData(AX_BYTE_READ_POS);
     sendData(Checksum);
     delayus(TX_DELAY_TIME);
@@ -571,7 +571,7 @@ int DynamixelClass::readCWLimit(unsigned char ID)
 
 int DynamixelClass::readCCWLimit(unsigned char ID)
 {   
-    Checksum = (~(ID + AX_POS_LENGTH  + AX_READ_DATA + AX_PRESENT_POSITION_L + AX_BYTE_READ_POS))&0xFF;
+    Checksum = (~(ID + AX_POS_LENGTH  + AX_READ_DATA + AX_CCW_ANGLE_LIMIT_L + AX_BYTE_READ_POS))&0xFF;
   
     setTx();
     sendData(AX_START);
@@ -579,11 +579,12 @@ int DynamixelClass::readCCWLimit(unsigned char ID)
     sendData(ID);
     sendData(AX_POS_LENGTH);
     sendData(AX_READ_DATA);
-    sendData(AX_PRESENT_POSITION_L);
+    sendData(AX_CCW_ANGLE_LIMIT_L);
     sendData(AX_BYTE_READ_POS);
     sendData(Checksum);
     delayus(TX_DELAY_TIME);
     setRx();
+
     
     Position_Long_Byte = -1;
     Time_Counter = 0;

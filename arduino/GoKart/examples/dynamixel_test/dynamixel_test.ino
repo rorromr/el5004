@@ -23,10 +23,14 @@ void setup()
   {
     Serial.print("Fond at "); Serial.println(MOTOR_ID);
   }
-  Dynamixel.setEndless(MOTOR_ID,OFF);
-  Dynamixel.ledStatus(1,OFF); 
+  Dynamixel.setAngleLimit(MOTOR_ID, 0, 4000);
+  delay(5);
+
+  Serial.print("CCW Limit: "); Serial.println(Dynamixel.readCCWLimit(MOTOR_ID));
+  Serial.print("CW Limit: "); Serial.println(Dynamixel.readCWLimit(MOTOR_ID));
   
   delay(1000);
+  Dynamixel.move(MOTOR_ID, 1500);
 }
 
 void loop()
