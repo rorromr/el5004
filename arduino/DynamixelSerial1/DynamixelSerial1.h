@@ -270,6 +270,9 @@ public:
 	int readPosition(unsigned char ID);
 	int readSpeed(unsigned char ID);
 	int readLoad(unsigned char ID);
+
+	int readCWLimit(unsigned char ID);
+	int readCCWLimit(unsigned char ID);
 	
 	int torqueStatus(unsigned char ID, bool Status);
 	int ledStatus(unsigned char ID, bool Status);

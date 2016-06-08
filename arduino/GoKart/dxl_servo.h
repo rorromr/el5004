@@ -13,6 +13,9 @@
 #include <DynamixelSerial1.h>
 #include <stdint.h>
 #include "error_code.h"
+#include "debug.h"
+
+#define DXL_SERVO_PING_ATTEMPTS 4
 
 namespace GoKart
 {
@@ -25,7 +28,7 @@ namespace GoKart
 
     DXL_SERVO_MAX_ANGLE_CW  = HW_STATUS_ERROR | (2 << 1),
 
-    DXL_SERVO_MAX_ANGLE_CWW = HW_STATUS_ERROR | (3 << 1)
+    DXL_SERVO_MAX_ANGLE_CCW = HW_STATUS_ERROR | (3 << 1)
   } dxl_status_type;
 
   class DxlServo
@@ -39,6 +42,8 @@ namespace GoKart
       void move(const int16_t target);
 
       void moveToZero();
+
+      bool check();
   
     protected:
       // Dynamixel lib

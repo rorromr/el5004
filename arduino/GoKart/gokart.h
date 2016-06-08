@@ -5,7 +5,7 @@
 #include "gokart_msgs.h" 
 
 // Dynamixel protocol
-#define GOKART_DXL_BAUDRATE 200000
+#define GOKART_DXL_BAUDRATE 1000000
 #define GOKART_DXL_CTRL_PIN 2
 
 // Actuators IDs
