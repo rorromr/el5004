@@ -28,7 +28,12 @@ namespace GoKart
 
     DXL_SERVO_MAX_ANGLE_CW  = HW_STATUS_ERROR | (2 << 1),
 
-    DXL_SERVO_MAX_ANGLE_CCW = HW_STATUS_ERROR | (3 << 1)
+    DXL_SERVO_MAX_ANGLE_CCW = HW_STATUS_ERROR | (3 << 1),
+
+    DXL_SERVO_ERROR_CONFIG  = HW_STATUS_ERROR | (4 << 1),
+
+    DXL_SERVO_NULL_INTERFACE= HW_STATUS_ERROR | (5 << 1)
+    
   } dxl_status_type;
 
   class DxlServo
@@ -37,7 +42,7 @@ namespace GoKart
   
       DxlServo(DynamixelClass& dxl, const uint8_t id);
   
-      void config(const uint16_t min, const uint16_t max, const uint16_t zero);
+      bool config(const uint16_t min, const uint16_t max, const uint16_t zero);
 
       void move(const int16_t target);
 
