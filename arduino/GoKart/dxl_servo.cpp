@@ -27,6 +27,11 @@ namespace GoKart
     dxl_->move(id_,encoder_target);
   }
 
+  int16_t DxlServo::getPosition()
+  {
+    return dxl_->readPosition(id_);
+  }
+
   void DxlServo::moveToZero()
   {
     dxl_->move(id_,zero_);
@@ -36,7 +41,7 @@ namespace GoKart
   {
     uint8_t attemps = 0;
     uint8_t check_status = 0;
-    DEBUG_PRINTLN("Init servo check")
+    DEBUG_PRINTLN("Init servo check");
 
     // Ping check
     while(check_status == 0)
@@ -60,7 +65,7 @@ namespace GoKart
     if (check_error(&status_)) return false;
 
     // Check angles
-    uint16_t pos = dxl->readPosition(id_)
+    uint16_t pos = dxl_->readPosition(id_);
     if (pos > max_)
     {
       DEBUG_PRINTLN("Servo max angle CW");

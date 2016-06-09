@@ -41,6 +41,8 @@ namespace GoKart
 
       void move(const int16_t target);
 
+      int16_t getPosition();
+
       void moveToZero();
 
       bool check();

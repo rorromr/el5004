@@ -1,3 +1,4 @@
+#define DEBUG_GOKART
 #include "DynamixelSerial1.h"
 #include "gokart.h"
 
@@ -9,20 +10,15 @@ GoKart::DxlServo servo(Dynamixel, 1);
 
 void setup()
 {
+  Serial.begin(57600);
   Dynamixel.begin(GOKART_DXL_BAUDRATE,GOKART_DXL_CTRL_PIN);
-  servo.config();
+  servo.config(100,3100,1600);
 }
 
 void loop()
 {
-  gokart.rf.update();
-  // Print values
-  Serial.print("Ch1: "); Serial.println(gokart.rf.getChannel(1));
-  Serial.print("Ch2: "); Serial.println(gokart.rf.getChannel(2));
-  Serial.print("Ch3: "); Serial.println(gokart.rf.getChannel(3));
-
-  gokart.brake.full();
-  delay(1500);
-  gokart.brake.release();
-  delay(1500);
+  servo.check();
+  Serial.print("Pos: "); Serial.println(servo.getPosition());
+  delay(100); 
 }
+
