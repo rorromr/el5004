@@ -34,4 +34,6 @@ arduino
 |       |-- gokart_integration [Desarrollo de software principal]
 |
 ```
+### Problemas conocidos
 
+La librería para el control de motores Dynamixel solo funciona usando un baudrate de 1.000.000 baud/s.

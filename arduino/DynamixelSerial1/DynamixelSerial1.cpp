@@ -105,7 +105,7 @@ int DynamixelClass::read_error(void)
             readData();                                    // Ax-12 ID
             readData();                                    // Length
             Error_Byte = readData();                       // Error
-                return (Error_Byte);
+            return (Error_Byte);
         }
     }
     return (-1);                                             // No Ax Response
@@ -685,6 +685,54 @@ int DynamixelClass::setVoltageLimit(unsigned char ID, unsigned char DVoltage, un
     setRx();
     
     return (read_error()); 
+}
+
+int DynamixelClass::setCWLimit(unsigned char ID, int CWLimit)
+{
+    uint8_t CW_H,CW_L;
+    CW_H = CWLimit >> 8U;    
+    CW_L = CWLimit & 0xFF;
+
+    Checksum = (~(ID + AX_GOAL_LENGTH +AX_WRITE_DATA+ AX_CW_ANGLE_LIMIT_L + CW_H + CW_L)) & 0xFF;
+    
+    setTx();
+    sendData(AX_START);                     
+    sendData(AX_START);
+    sendData(ID);
+    sendData(AX_GOAL_LENGTH);
+    sendData(AX_WRITE_DATA);
+    sendData(AX_CW_ANGLE_LIMIT_L);
+    sendData(CW_L);
+    sendData(CW_H);
+    sendData(Checksum);
+    delayus(TX_DELAY_TIME);
+    setRx();
+    
+    return (read_error());
+}
+
+int DynamixelClass::setCCWLimit(unsigned char ID, int CCWLimit)
+{
+    uint8_t CCW_H,CCW_L;
+    CCW_H = CCWLimit >> 8U;    
+    CCW_L = CCWLimit & 0xFF;
+
+    Checksum = (~(ID + AX_GOAL_LENGTH +AX_WRITE_DATA+ AX_CCW_ANGLE_LIMIT_L + CCW_H + CCW_L)) & 0xFF;
+    
+    setTx();
+    sendData(AX_START);                     
+    sendData(AX_START);
+    sendData(ID);
+    sendData(AX_GOAL_LENGTH);
+    sendData(AX_WRITE_DATA);
+    sendData(AX_CCW_ANGLE_LIMIT_L);
+    sendData(CCW_L);
+    sendData(CCW_H);
+    sendData(Checksum);
+    delayus(TX_DELAY_TIME);
+    setRx();
+    
+    return (read_error());
 }
 
 int DynamixelClass::setAngleLimit(unsigned char ID, int CWLimit, int CCWLimit)
