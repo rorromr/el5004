@@ -14,48 +14,44 @@
 #define RF_INTERFACE_H
 
 #include <stdint.h>
-#include "gokart_msgs.h"
+#include "ICommunication.h"
 
-#define RF_INTERFACE_MAX_CH 8
-
-// RF
+ // RF
 #define GOKART_RF_CH_NUM 3
+
 #define GOKART_RF_CH1_PIN 5
 #define GOKART_RF_CH2_PIN 6
 #define GOKART_RF_CH3_PIN 7
+#define RF_INTERFACE_MAX_CH 8
+
+#define GOKART_RF_EMERGENCY_MIN 900
+#define GOKART_RF_EMERGENCY_MAX 1800
+
+#define GOKART_RF_STWHEEL_MIN 960
+#define GOKART_RF_STWHEEL_MAX 1965
+#define GOKART_RF_STWHEEL_DELTA 100
+
+#define GOKART_RF_BRAKE_THROTTLE_MIN 900
+#define GOKART_RF_BRAKE_THROTTLE_MAX 1960
+#define GOKART_RF_BRAKE_THROTTLE_DELTA 100
 
 namespace GoKart
 {
-  class RFInterface
+  class RFInterface: public ICommunication
   {
     public:
-  
       RFInterface(const uint8_t ch_num);
-  
-      /**
-       * @brief Add channel to RFInterface
-       * 
-       * @param ch Channel number
-       * @param port Pin connection
-       * 
-       * @return True if the channel was successfully added
-       */
-      /*inline bool addChannel(const uint8_t ch, const uint8_t port)
-      {
-        ports_[ch] = port;
-      }
-      /*
-      
+
       /**
        * @brief Update all channels.
        * Usually you call this method in your control loop.
        */
       void update();
-  
+
       /**
        * @brief Get last channel uptime.
        * Usually called before update() method.
-       * 
+       *
        * @param ch Channel
        * @return Channel uptime (pulse duration)
        */
@@ -64,15 +60,15 @@ namespace GoKart
         return uptime_[ch];
       }
 
-      void getCommand (DataSerialization::GoKartCommand &command);
-  
+      virtual void getCommand(DataSerialization::GoKartCommand& cmd);
+
     private:
       // Total number of channels
       uint8_t ch_num_;
-  
+
       // Array of ports
       uint8_t ports_[RF_INTERFACE_MAX_CH];
-  
+
       // Array of uptime (pulse durations)
       uint32_t uptime_[RF_INTERFACE_MAX_CH];
   };
