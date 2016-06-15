@@ -11,10 +11,10 @@ install:
   - ln -s $PWD/arduino/DynamixelSerial1 /usr/local/share/arduino/libraries/DynamixelSerial1
   - ln -s $PWD/arduino/GoKart /usr/local/share/arduino/libraries/GoKart
 script:
-  - arduino --verify --board arduino:avr:uno $PWD/arduino/GoKart/examples/msgs_test/msgs_test.ino
-  - arduino --verify --board arduino:avr:uno $PWD/arduino/GoKart/examples/gokart_integration/gokart_integration.ino
-  - arduino --verify --board arduino:avr:uno $PWD/arduino/GoKart/examples/gokart_dynamixel/gokart_dynamixel.ino
-  - arduino --verify --board arduino:avr:uno $PWD/arduino/GoKart/examples/rf_test/rf_test.ino
+  - arduino --verify --board arduino:avr:mega:cpu=atmega2560 $PWD/arduino/GoKart/examples/msgs_test/msgs_test.ino
+  - arduino --verify --board arduino:avr:mega:cpu=atmega2560 $PWD/arduino/GoKart/examples/gokart_integration/gokart_integration.ino
+  - arduino --verify --board arduino:avr:mega:cpu=atmega2560 $PWD/arduino/GoKart/examples/gokart_dynamixel/gokart_dynamixel.ino
+  - arduino --verify --board arduino:avr:mega:cpu=atmega2560 $PWD/arduino/GoKart/examples/rf_test/rf_test.ino
 notifications:
   email:
     on_success: change
