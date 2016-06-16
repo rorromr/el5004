@@ -37,3 +37,7 @@ arduino
 ### Problemas conocidos
 
 La librería para el control de motores Dynamixel solo funciona usando un baudrate de 1.000.000 baud/s.
+
+### Datasheet EX106
+[Documento PDF](http://www.hizook.com/files/users/3/EX-106_Robotis_Dynamixel_Servo_UserGuide.pdf)
+
