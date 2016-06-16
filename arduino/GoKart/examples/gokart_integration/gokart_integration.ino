@@ -1,29 +1,19 @@
 #include "DynamixelSerial1.h"
 #include "gokart.h"
 
-// Dynamixel protocol
-#define GOKART_DXL_BAUDRATE 200000
-#define GOKART_DXL_CTRL_PIN 2
-
-GoKart::GoKartHW gokart(Dynamixel);
+GoKart::RFInterface rf(GOKART_RF_CH_NUM);
+GoKart::GoKartHW gokart(Dynamixel,rf);
 
 void setup()
 {
-  Dynamixel.begin(GOKART_DXL_BAUDRATE,GOKART_DXL_CTRL_PIN);
+  Dynamixel.begin(GOKART_DXL_BAUDRATE, GOKART_DXL_CTRL_PIN);
   gokart.init();
 }
 
 void loop()
 {
-  gokart.rf.update();
-  // Print values
-  Serial.print("Ch1: "); Serial.println(gokart.rf.getChannel(1));
-  Serial.print("Ch2: "); Serial.println(gokart.rf.getChannel(2));
-  Serial.print("Ch3: "); Serial.println(gokart.rf.getChannel(3));
+  gokart.com_->getCommand(gokart.cmd_);
+  gokart.printCommand();
 
-  gokart.brake.full();
-  delay(1500);
-  gokart.brake.release();
-  delay(1500);
+  gokart.sw.move((gokart.cmd_.stwheel.data+500)*3);
 }
-

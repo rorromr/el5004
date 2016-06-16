@@ -1,6 +1,6 @@
 /**
  * @brief Communication interface
- * @author Rodrigo Muñoz
+ * @author David Gomez
  * @date 2016
  *
  * @TODO
@@ -10,16 +10,18 @@
 #ifndef GOKART_COM_INTERFACE_H
 #define GOKART_COM_INTERFACE_H
 
+#include "gokart_msgs.h"
+
 namespace GoKart
 {
-  class ComInterface
+  class ICommunication
   {
     public:
-      ComInterface();
-      
-      void getCmd();
-      
-      
+
+    	virtual void update() = 0;
+
+    	virtual void getCommand(DataSerialization::GoKartCommand& cmd) = 0;
+
   };
 }
 

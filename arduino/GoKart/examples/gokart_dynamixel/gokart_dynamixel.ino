@@ -20,5 +20,15 @@ void loop()
   servo.check();
   Serial.print("Pos: "); Serial.println(servo.getPosition());
   delay(100); 
+  while (true){
+  	servo.move(1400);
+  	delay(2000); 
+  	Serial.print("Pos: "); Serial.println(servo.getPosition());
+
+  	servo.move(800);
+  	delay(2000); 
+  	Serial.print("Pos: "); Serial.println(servo.getPosition());
+  }
+  
 }
 
