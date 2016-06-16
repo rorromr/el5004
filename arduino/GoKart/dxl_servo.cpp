@@ -42,12 +42,9 @@ namespace GoKart
     return true;
   }
 
-  void DxlServo::move(const int16_t target)
+  void DxlServo::move(const int16_t pos_target, const int16_t vel_target)
   {
-    int16_t encoder_target = target;
-    // @TODO Map value from -254<target<254 -> encoder position using min_,max_,zero_
-    // Move servo using lib
-    dxl_->move(id_,encoder_target);
+    dxl_->moveSpeed( id_, pos_target, vel_target);
   }
 
   int16_t DxlServo::getPosition()

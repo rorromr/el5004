@@ -16,6 +16,7 @@
 #include "debug.h"
 
 #define DXL_SERVO_PING_ATTEMPTS 4
+#define DXL_SERVO_DEFAULT_SPEED 512
 
 namespace GoKart
 {
@@ -44,7 +45,7 @@ namespace GoKart
   
       bool config(const uint16_t min, const uint16_t max, const uint16_t zero);
 
-      void move(const int16_t target);
+      void move(const int16_t pos_target, const int16_t vel_target = DXL_SERVO_DEFAULT_SPEED);
 
       int16_t getPosition();
 
