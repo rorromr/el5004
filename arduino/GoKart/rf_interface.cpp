@@ -13,9 +13,13 @@ namespace GoKart
     ports_[2] = GOKART_RF_CH3_PIN;
 
     // Config ports
-    pinMode(GOKART_RF_CH1_PIN, INPUT); //I connected this to Chan1 of the Receiver
-    pinMode(GOKART_RF_CH2_PIN, INPUT); //I connected this to Chan3 of the Receiver
-    pinMode(GOKART_RF_CH3_PIN, INPUT); //I connected this to Chan6 of the Receiver
+
+    // Used for Steering wheel
+    pinMode(GOKART_RF_CH1_PIN, INPUT); // Connected to CH1 of the Receiver
+    // Used for brake and throttle
+    pinMode(GOKART_RF_CH2_PIN, INPUT); // Connected to CH3 of the Receiver
+    // Used for emergency
+    pinMode(GOKART_RF_CH3_PIN, INPUT); // Connected to CH6 of the Receiver
 
     uptime_[0] = 0UL;
     uptime_[1] = 0UL;
@@ -44,7 +48,7 @@ namespace GoKart
         cmd.stwheel.data = uptime_[0]<GOKART_RF_STWHEEL_MIN ? (uint8_t) -128 : (uint8_t) map(uptime_[0], GOKART_RF_STWHEEL_MIN, left_max, -128, 0);
       }
       else if (uptime_[0]>= right_min){
-        cmd.stwheel.data = uptime_[0]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 128 : (uint8_t) map(uptime_[0], right_min, GOKART_RF_STWHEEL_MAX, 0, 128);
+        cmd.stwheel.data = uptime_[0]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 127 : (uint8_t) map(uptime_[0], right_min, GOKART_RF_STWHEEL_MAX, 0, 127);
       }
       else{
         cmd.stwheel.data = (uint8_t) 0;
