@@ -7,6 +7,13 @@ namespace GoKart
   {
     ;    
   }
+
+  void Brake::move(const uint8_t pos_target)
+  {
+    // Map values
+    int16_t encoder_target = min_ + 12 * pos_target;
+    dxl_->moveSpeed( id_, encoder_target, DXL_SERVO_DEFAULT_SPEED);
+  }
     
   void Brake::full()
   {
