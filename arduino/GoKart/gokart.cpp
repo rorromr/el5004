@@ -45,6 +45,8 @@ namespace GoKart
     brake.full();
     // Center wheels
     sw.center();
+    // Release throttle
+    thr.release();
   }
 
   void GoKartHW::setCommunication(ICommunication &com)
@@ -64,7 +66,7 @@ namespace GoKart
     // Set brake command
     brake.move(cmd_.brake.data);
     // Set throttle
-    // @TODO
+    thr.move(cmd_.throttle.data);
   }
 
   void GoKartHW::printCommand()

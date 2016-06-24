@@ -12,12 +12,22 @@
 
 #include "dxl_servo.h"
 
+#define GOKART_THROTTLE_CW_ENCODER (100U)
+#define GOKART_THROTTLE_CCW_ENCODER (3995U)
+#define GOKART_THROTTLE_CENTER_ENCODER (3995U)
+#define GOKART_THROTTLE_DEFAULT_SPEED (180U)
+#define GOKART_THROTTLE_COMMAND_FACTOR (1.0f/255.0f)
+
 namespace GoKart
 {
   class Throttle: public DxlServo
   {
     public:
       Throttle(DynamixelClass& dxl, const uint8_t id);
+
+      bool init();
+
+      void move(const uint8_t pos_target);
       
       void full();
 

@@ -1,8 +1,10 @@
 #include "DynamixelSerial1.h"
 #include "gokart.h"
+#include <stdio.h>
 
 GoKart::RFInterface rf(GOKART_RF_CH_NUM);
 GoKart::GoKartHW gokart(Dynamixel,rf);
+char print_buffer[30];
 
 void setup()
 {
@@ -35,12 +37,18 @@ void loop()
   gokart.setCommand();
 
   /*
-   * DEBUG COMMAND
+   * AVOID TO USE PRINT IN MAIN LOOP!
+   * 
   */
+  /*
   // Brake
-  Serial.print("BR "); Serial.print(gokart.cmd_.brake.data);
-  Serial.print(" | "); Serial.println(gokart.brake.getPosition());
+  sprintf(print_buffer, "BR %4d | %4d\n", gokart.cmd_.brake.data, gokart.brake.getPosition());
+  Serial.print(print_buffer);
   // Steering wheel
-  Serial.print("SW "); Serial.print(gokart.cmd_.stwheel.data);
-  Serial.print(" | "); Serial.println(gokart.sw.getPosition());
+  sprintf(print_buffer, "SW %4d | %4d\n", gokart.cmd_.stwheel.data, gokart.sw.getPosition());
+  Serial.print(print_buffer);
+  // Throttle
+  sprintf(print_buffer, "TH %4d | %4d\n", gokart.cmd_.throttle.data, gokart.thr.getPosition());
+  Serial.print(print_buffer);
+  */
 }
