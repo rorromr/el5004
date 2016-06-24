@@ -14,9 +14,23 @@ void setup()
 void loop()
 {
   gokart.com_->getCommand(gokart.cmd_);
-  Serial.print(gokart.cmd_.stwheel.data);
-  Serial.print(" | ");
-  Serial.println(gokart.sw.getPosition());
+  
+  while(gokart.cmd_.emergency.data)
+  {
+    gokart.setEmergencyState();
+    Serial.println("ON EMERGENCY!");
+    delay(100);
+    gokart.com_->getCommand(gokart.cmd_);
+  }
+
+  // Brake
+  Serial.print("BR "); Serial.print(gokart.cmd_.brake.data);
+  Serial.print(" | "); Serial.println(gokart.brake.getPosition());
+
+  // Steering wheel
+  Serial.print("SW "); Serial.print(gokart.cmd_.stwheel.data);
+  Serial.print(" | "); Serial.println(gokart.sw.getPosition());
 
   gokart.sw.move(gokart.cmd_.stwheel.data);
+  gokart.brake.move(gokart.cmd_.brake.data); 
 }

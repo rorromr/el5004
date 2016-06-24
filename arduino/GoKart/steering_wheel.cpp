@@ -18,7 +18,7 @@ namespace GoKart
 
   void SteeringWheel::center()
   {
-    dxl_->moveSpeed( id_, zero_, GOKART_STEERINGWHEEL_DEFAULT_SPEED);
+    dxl_->moveSpeed( id_, GOKART_STEERINGWHEEL_CENTER_ENCODER, GOKART_STEERINGWHEEL_DEFAULT_SPEED);
   }
 
   void SteeringWheel::setSpeed(const uint16_t speed)

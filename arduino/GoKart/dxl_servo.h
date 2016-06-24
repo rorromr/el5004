@@ -16,7 +16,7 @@
 #include "debug.h"
 
 #define DXL_SERVO_PING_ATTEMPTS 4
-#define DXL_SERVO_DEFAULT_SPEED 512
+#define DXL_SERVO_DEFAULT_SPEED 300
 
 namespace GoKart
 {

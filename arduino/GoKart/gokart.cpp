@@ -25,7 +25,8 @@ namespace GoKart
 
   void GoKartHW::setEmergencyState()
   {
-    ;
+    brake.full();
+    sw.center();
   }
 
   void GoKartHW::setCommunication(ICommunication &com)
