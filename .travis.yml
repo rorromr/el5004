@@ -12,7 +12,7 @@ install:
   - ln -s $PWD/arduino/GoKart /usr/local/share/arduino/libraries/GoKart
 script:
   - source $PWD/scripts/build_tool.sh
-  - build_examples $PWD/arduino/GoKart
+  - build_examples $PWD/arduino/GoKart arduino:avr:mega:cpu=atmega2560
 notifications:
   email:
     on_success: change
