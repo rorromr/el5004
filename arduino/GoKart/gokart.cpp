@@ -18,19 +18,19 @@ namespace GoKart
     bool result = false;
     // Init brake
     result = brake.init();
-    if (!result) DEBUG_PRINT("E/GoKart/init/Brake bad initialization");
+    if (!result) DEBUG_PRINTLN("E/GoKart/init/Brake bad initialization");
 
     // Init steering wheel
     result = sw.init();
-    if (!result) DEBUG_PRINT("E/GoKart/init/SteeringWheel bad initialization");
+    if (!result) DEBUG_PRINTLN("E/GoKart/init/SteeringWheel bad initialization");
     
     // Init throttle
     result = thr.init();
-    if (!result) DEBUG_PRINT("E/GoKart/init/Throttle bad initialization");
+    if (!result) DEBUG_PRINTLN("E/GoKart/init/Throttle bad initialization");
 
     // Init communication
     result = com_->init();
-    if (!result) DEBUG_PRINT("E/GoKart/init/Communication bad initialization");
+    if (!result) DEBUG_PRINTLN("E/GoKart/init/Communication bad initialization");
 
   }
 
