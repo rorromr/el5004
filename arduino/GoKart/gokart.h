@@ -13,10 +13,7 @@
 // Actuators IDs
 #define GOKART_BRAKE_ID 2
 #define GOKART_THROTTLE_ID 3
-#define GOKART_STEERINGWHEEL_ID 1  //era 4 pero para probar le puse 1
-
-
-
+#define GOKART_STEERINGWHEEL_ID 1
 
 namespace GoKart
 {

@@ -43,7 +43,7 @@ namespace GoKart
   
       DxlServo(DynamixelClass& dxl, const uint8_t id);
   
-      bool config(const uint16_t min, const uint16_t max, const uint16_t zero);
+      bool init(const uint16_t min, const uint16_t max, const uint16_t zero);
 
       void move(const int16_t pos_target, const int16_t vel_target = DXL_SERVO_DEFAULT_SPEED);
 

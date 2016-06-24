@@ -6,6 +6,7 @@ GoKart::GoKartHW gokart(Dynamixel,rf);
 
 void setup()
 {
+  Serial.begin(115200);
   Dynamixel.begin(GOKART_DXL_BAUDRATE, GOKART_DXL_CTRL_PIN);
   gokart.init();
 }
@@ -13,7 +14,9 @@ void setup()
 void loop()
 {
   gokart.com_->getCommand(gokart.cmd_);
-  gokart.printCommand();
+  Serial.print(gokart.cmd_.stwheel.data);
+  Serial.print(" | ");
+  Serial.println(gokart.sw.getPosition());
 
-  gokart.sw.move((gokart.cmd_.stwheel.data+500)*3);
+  gokart.sw.move(gokart.cmd_.stwheel.data);
 }

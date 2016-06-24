@@ -14,7 +14,7 @@ namespace GoKart
     }
   }
 
-  bool DxlServo::config(const uint16_t min, const uint16_t max, const uint16_t zero)
+  bool DxlServo::init(const uint16_t min, const uint16_t max, const uint16_t zero)
   {
     min_ = min;
     max_ = max;
