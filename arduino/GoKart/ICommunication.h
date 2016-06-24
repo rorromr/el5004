@@ -22,6 +22,8 @@ namespace GoKart
 
     	virtual void getCommand(DataSerialization::GoKartCommand& cmd) = 0;
 
+      virtual bool init() = 0;
+
   };
 }
 

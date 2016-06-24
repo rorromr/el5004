@@ -22,7 +22,7 @@ namespace GoKart
     public:
       GoKartHW(DynamixelClass& dxl, ICommunication &com);
 
-      void init();
+      bool init();
 
       uint8_t getErrorCode();
 
@@ -31,6 +31,15 @@ namespace GoKart
       void setCommunication(ICommunication &com);
 
       void updateCommand();
+
+      void setCommand();
+
+      inline bool isEmergency()
+      {
+        return (bool) cmd_.emergency.data;
+      }
+
+      void update();
 
       void printCommand();
 

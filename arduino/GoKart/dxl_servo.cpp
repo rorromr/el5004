@@ -59,7 +59,7 @@ namespace GoKart
 
   bool DxlServo::check()
   {
-    DEBUG_PRINTLN("DEBUG/DxlServo/check/");
+    DEBUG_PRINTLN("D/DxlServo/check/");
     // Ping check
     uint8_t ping_attempts = 0U;
     uint8_t ping_status = 0U;

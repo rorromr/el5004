@@ -59,8 +59,21 @@ namespace GoKart
       {
         return uptime_[ch];
       }
-
+      
+      /**
+       * @brief Fill the command using received data.
+       * Usually called before update() method.
+       *
+       * @param cmd Command to fill
+       */
       virtual void getCommand(DataSerialization::GoKartCommand& cmd);
+
+      /**
+       * @brief Initializate and verify communication.
+       *
+       * @return true if the interface is available, false otherwise
+       */
+      bool init();
 
     private:
       // Total number of channels

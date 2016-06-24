@@ -12,7 +12,11 @@
 
 #include "dxl_servo.h"
 
-#define BRAKE_COMMAND_FACTOR (1.0f/255.0f)
+#define GOKART_BRAKE_CW_ENCODER (100U)
+#define GOKART_BRAKE_CCW_ENCODER (3995U)
+#define GOKART_BRAKE_CENTER_ENCODER (3995U)
+#define GOKART_BRAKE_DEFAULT_SPEED (180U)
+#define GOKART_BRAKE_COMMAND_FACTOR (1.0f/255.0f)
 
 namespace GoKart
 {
@@ -20,6 +24,8 @@ namespace GoKart
   {
     public:
       Brake(DynamixelClass& dxl, const uint8_t id);
+
+      bool init();
 
       void move(const uint8_t pos_target);
       

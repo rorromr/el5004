@@ -12,10 +12,26 @@ namespace GoKart
   }
 
 
-  void GoKartHW::init()
+  bool GoKartHW::init()
   {
-    // @TODO
-    // Verify init state of motors and rf
+    // Verify motors
+    bool result = false;
+    // Init brake
+    result = brake.init();
+    if (!result) DEBUG_PRINT("E/GoKart/init/Brake bad initialization");
+
+    // Init steering wheel
+    result = sw.init();
+    if (!result) DEBUG_PRINT("E/GoKart/init/SteeringWheel bad initialization");
+    
+    // Init throttle
+    result = thr.init();
+    if (!result) DEBUG_PRINT("E/GoKart/init/Throttle bad initialization");
+
+    // Init communication
+    result = com_->init();
+    if (!result) DEBUG_PRINT("E/GoKart/init/Communication bad initialization");
+
   }
 
   uint8_t GoKartHW::getErrorCode()
@@ -25,7 +41,9 @@ namespace GoKart
 
   void GoKartHW::setEmergencyState()
   {
+    // Put the brake full
     brake.full();
+    // Center wheels
     sw.center();
   }
 
@@ -37,6 +55,16 @@ namespace GoKart
   void GoKartHW::updateCommand()
   {
     com_->getCommand(cmd_);
+  }
+
+  void GoKartHW::setCommand()
+  {
+    // Set steering wheel command
+    sw.move(cmd_.stwheel.data);
+    // Set brake command
+    brake.move(cmd_.brake.data);
+    // Set throttle
+    // @TODO
   }
 
   void GoKartHW::printCommand()
