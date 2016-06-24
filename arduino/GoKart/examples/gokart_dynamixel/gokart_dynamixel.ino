@@ -12,7 +12,6 @@ void setup()
 {
   Serial.begin(57600);
   Dynamixel.begin(GOKART_DXL_BAUDRATE,GOKART_DXL_CTRL_PIN);
-  servo.config(100,3100,1600);
 }
 
 void loop()
