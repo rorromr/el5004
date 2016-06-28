@@ -24,6 +24,10 @@
 #define GOKART_RF_CH3_PIN 7
 #define RF_INTERFACE_MAX_CH 8
 
+#define RF_INTERFACE_BUFFER_SIZE 10
+#define RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT 0.2
+
+
 #define GOKART_RF_EMERGENCY_MIN 900
 #define GOKART_RF_EMERGENCY_MAX 1900
 
@@ -59,7 +63,7 @@ namespace GoKart
       {
         return uptime_[ch];
       }
-      
+
       /**
        * @brief Fill the command using received data.
        * Usually called before update() method.
@@ -84,6 +88,15 @@ namespace GoKart
 
       // Array of uptime (pulse durations)
       uint32_t uptime_[RF_INTERFACE_MAX_CH];
+
+      // Buffer filter for every channel-command
+      uint32_t buffer_uptime0[RF_INTERFACE_BUFFER_SIZE+1];
+      uint32_t buffer_uptime1[RF_INTERFACE_BUFFER_SIZE+1];
+      uint32_t buffer_uptime2[RF_INTERFACE_BUFFER_SIZE+1];
+
+      //Counter buffer
+      uint8_t counter_buffer;
+
   };
 }
 
