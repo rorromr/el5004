@@ -1,4 +1,6 @@
-# Código para Arduino
+# EL5004: Teleoperación de Go Kart
+
+## Código para Arduino
 
 La plataforma de desarrollo corresponde a Arduino Mega 2560.
 
@@ -30,14 +32,23 @@ arduino
 |   |
 |   +-- examples
 |       |-- dynamixel_test [Test de motores Dynamixel]
-|       |-- rf_test [Test de comunicación RF]
+|       |-- gokart_dynamixel [Test motores Dynamixel usando interfaz GoKart]
 |       |-- gokart_integration [Desarrollo de software principal]
+|       |-- msg_test [Test de serialización de mensajes]
+|       |-- rf_test [Test de comunicación RF]
+|       |-- rf_test2 [Test de comunicación RF con salida serial más rápida]
 |
 ```
-### Problemas conocidos
+#### Instalación
+
+Copiar el directorio `GoKart` en `~/Arduino/libraries`
+
+
+#### Problemas conocidos
 
 La librería para el control de motores Dynamixel solo funciona usando un baudrate de 1.000.000 baud/s.
 
-### Datasheet EX106
+## Datasheet EX106
+
 [Documento PDF](http://www.hizook.com/files/users/3/EX-106_Robotis_Dynamixel_Servo_UserGuide.pdf)
 
