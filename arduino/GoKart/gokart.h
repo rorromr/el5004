@@ -8,7 +8,7 @@
 
 // Dynamixel protocol
 #define GOKART_DXL_BAUDRATE 1000000
-#define GOKART_DXL_CTRL_PIN 2
+#define GOKART_DXL_CTRL_PIN 4
 
 // Actuators IDs
 #define GOKART_BRAKE_ID 2
