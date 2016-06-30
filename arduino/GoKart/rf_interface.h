@@ -79,6 +79,14 @@ namespace GoKart
        */
       bool init();
 
+      /**
+       * @brief Get mean.
+       *
+       * @param buffer Buffer pointer.
+       * @return mean of the buffer.
+       */
+       uint32_t meanBuffer(uint32_t *buffer);
+
     private:
       // Total number of channels
       uint8_t ch_num_;

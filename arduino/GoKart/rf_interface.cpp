@@ -24,7 +24,7 @@ namespace GoKart
     uptime_[1] = 0UL;
     uptime_[2] = 0UL;
 
-    for (int i=0;i <= RF_INTERFACE_BUFFER_SIZE; i++){
+    for (uint8_t i=0; i <= RF_INTERFACE_BUFFER_SIZE; ++i){
       buffer_uptime0[i]=0UL;
       buffer_uptime1[i]=0UL;
       buffer_uptime2[i]=0UL;
@@ -40,12 +40,12 @@ namespace GoKart
     return true;
   }
 
-  uint32_t RFInterface::meanBuffer(uint32_t buffer){
-    uint32_t result=0;
-    for (int i=0; i< RF_INTERFACE_BUFFER_SIZE; i++){
-      result +=buffer[i];
+  uint32_t RFInterface::meanBuffer(uint32_t *buffer){
+    uint32_t result = 0;
+    for (uint8_t i=0; i < RF_INTERFACE_BUFFER_SIZE; ++i){
+      result += buffer[i];
     }
-    result= (uint32_t) (result/RF_INTERFACE_BUFFER_SIZE);
+    result = (uint32_t) (1.0f/RF_INTERFACE_BUFFER_SIZE*result);
     return result;
   }
 
@@ -58,8 +58,9 @@ namespace GoKart
 
 
     //Reiniciar contador de buffer ("puntero"), de ser necesario
-    if (counter_buffer==RF_INTERFACE_BUFFER_SIZE){
-      counter_buffer=0;
+    if (counter_buffer == RF_INTERFACE_BUFFER_SIZE)
+    {
+      counter_buffer = 0;
     }
 
     //Actualizar buffer con valor nuevo y eliminando el mas antiguo
@@ -68,9 +69,9 @@ namespace GoKart
     buffer_uptime2[counter_buffer]=uptime_[2];
 
     //Actualizar valor final del buffer => Ponderacion entre promedio y valor entrante, ponderacion dependiente del DEFINE.
-    buffer_uptime0[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(uint32_t buffer_uptime0) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[0] );
-    buffer_uptime1[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(uint32_t buffer_uptime1) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[1] );
-    buffer_uptime2[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(uint32_t buffer_uptime2) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[2] );
+    buffer_uptime0[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime0) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[0] );
+    buffer_uptime1[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime1) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[1] );
+    buffer_uptime2[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime2) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[2] );
 
     //ACtualizar contador
     counter_buffer++;
