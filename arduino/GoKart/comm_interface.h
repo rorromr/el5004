@@ -14,7 +14,7 @@
 
 namespace GoKart
 {
-  class ICommunication
+  class CommInterface
   {
     public:
 

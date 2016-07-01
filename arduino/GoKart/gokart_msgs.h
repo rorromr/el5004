@@ -11,10 +11,10 @@
  * 
  * | Field      | Type     | Size (bytes) | Offset | Description             |
  * |------------|----------|--------------|--------|-------------------------|
- * | stwheel    | int8_t   | 4            | 0      | Steering wheel command  |
- * | brake      | uint8_t  | 4            | 4      | Brake command           |
- * | throttle   | uint8_t  | 4            | 8      | Throttle command        |
- * | emergency  | uint8_t  | 4            | 12     | Set emergency state     |
+ * | stwheel    | int8_t   | 1            | 0      | Steering wheel command  |
+ * | brake      | uint8_t  | 1            | 1      | Brake command           |
+ * | throttle   | uint8_t  | 1            | 2      | Throttle command        |
+ * | emergency  | uint8_t  | 1            | 3      | Set emergency state     |
  * 
  * 
  * Status message
@@ -22,10 +22,10 @@
  * 
  * | Field       | Type     | Size (bytes) | Offset | Description                |
  * |-------------|----------|--------------|--------|----------------------------|
- * | stwheel_err | uint8_t  | 4            | 0      | Steering wheel error code  |
- * | brake_err   | uint8_t  | 4            | 4      | Brake error code           |
- * | throttle_err| uint8_t  | 4            | 8      | Throttle error code        |
- * | global_err  | uint8_t  | 4            | 12     | Global error code          |
+ * | stwheel_err | uint8_t  | 1            | 0      | Steering wheel error code  |
+ * | brake_err   | uint8_t  | 1            | 1      | Brake error code           |
+ * | throttle_err| uint8_t  | 1            | 2      | Throttle error code        |
+ * | global_err  | uint8_t  | 1            | 3      | Global error code          |
  *  
  * 
  */
@@ -34,6 +34,8 @@
 #define GOKART_MSGS_H
 
 #include "data_serialization.h"
+
+#define GOKART_MSGS_SIZE 4
 
 namespace DataSerialization
 {

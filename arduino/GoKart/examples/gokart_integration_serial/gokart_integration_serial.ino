@@ -2,8 +2,8 @@
 #include "gokart.h"
 #include <stdio.h>
 
-GoKart::RFInterface rf(GOKART_RF_CH_NUM);
-GoKart::GoKartHW gokart(Dynamixel, rf);
+GoKart::SerialInterface serialCom(Serial);
+GoKart::GoKartHW gokart(Dynamixel, serialCom);
 char print_buffer[30];
 
 void setup()

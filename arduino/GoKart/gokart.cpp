@@ -2,7 +2,7 @@
 
 namespace GoKart
 {
-  GoKartHW::GoKartHW(DynamixelClass& dxl, ICommunication &com):
+  GoKartHW::GoKartHW(DynamixelClass& dxl, CommInterface &com):
     dxl_(&dxl),
     brake(dxl, GOKART_BRAKE_ID),
     thr(dxl, GOKART_THROTTLE_ID),
@@ -49,7 +49,7 @@ namespace GoKart
     thr.release();
   }
 
-  void GoKartHW::setCommunication(ICommunication &com)
+  void GoKartHW::setCommunication(CommInterface &com)
   {
     com_ = &com;
   }

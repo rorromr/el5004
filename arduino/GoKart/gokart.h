@@ -1,8 +1,9 @@
 #include "brake.h"
 #include "steering_wheel.h"
 #include "throttle.h"
-#include "ICommunication.h"
+#include "comm_interface.h"
 #include "rf_interface.h"
+#include "serial_interface.h"
 #include "gokart_msgs.h"
 #include "Arduino.h"
 
@@ -20,7 +21,7 @@ namespace GoKart
   class GoKartHW
   {
     public:
-      GoKartHW(DynamixelClass& dxl, ICommunication &com);
+      GoKartHW(DynamixelClass& dxl, CommInterface &com);
 
       bool init();
 
@@ -28,7 +29,7 @@ namespace GoKart
 
       void setEmergencyState();
 
-      void setCommunication(ICommunication &com);
+      void setCommunication(CommInterface &com);
 
       void updateCommand();
 
@@ -49,7 +50,7 @@ namespace GoKart
       DynamixelClass* dxl_;
 
     public:
-      ICommunication* com_;
+      CommInterface* com_;
       DataSerialization::GoKartCommand cmd_;
       Brake brake;
       Throttle thr;
