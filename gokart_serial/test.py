@@ -10,7 +10,9 @@ import time
 
 def main():
     gokart = GoKartSerial()
-    gokart.set_brake(125)
+    gokart.set_brake(5)
+    gokart.set_throttle(8)
+    gokart.set_emergency(True)
 
 if __name__ == '__main__':
     main()
