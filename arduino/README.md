@@ -37,6 +37,7 @@ arduino
 |       |-- msg_test [Test de serialización de mensajes]
 |       |-- rf_test [Test de comunicación RF]
 |       |-- rf_test2 [Test de comunicación RF con salida serial más rápida]
+|       |-- serial_test [Test de comunicación serial]
 |
 ```
 #### Instalación

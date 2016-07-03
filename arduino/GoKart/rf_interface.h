@@ -14,7 +14,7 @@
 #define RF_INTERFACE_H
 
 #include <stdint.h>
-#include "ICommunication.h"
+#include "comm_interface.h"
 
  // RF
 #define GOKART_RF_CH_NUM 3
@@ -37,7 +37,7 @@
 
 namespace GoKart
 {
-  class RFInterface: public ICommunication
+  class RFInterface: public CommInterface
   {
     public:
       RFInterface(const uint8_t ch_num);
