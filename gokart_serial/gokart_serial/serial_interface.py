@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+from __future__ import print_function, division
 
 __author__ = 'Rodrigo Muñoz'
 
 from serial import Serial, SerialException
 import StringIO
 from array import array
-from threading import Lock
+from threading import Lock, Thread
+import time
+import sys
 from .message import GoKartCommand, to_hex
 
 class GoKartSerial(object):
     """GoKart main class"""
-    def __init__(self, port='/dev/ttyUSB0', baudrate=115200):
+    def __init__(self, port='/dev/ttyUSB0', baudrate=9600):
         self.port_name = port
         self.baudrate = baudrate
         self.cmd = GoKartCommand()
@@ -50,10 +52,15 @@ class GoKartSerial(object):
         self.ser.write(data)
 
     def read(self, length=1, readline=False):
-        if readline:
-            return self.ser.readline()
-        else:
-            return self.ser.read(length)
+        try: 
+            if readline:
+                return self.ser.readline()
+            else:
+                return self.ser.read(length)
+        except SerialException:
+           print('Error reading')
+           return ''
+
 
 
     def __send_command(self):
@@ -111,4 +118,22 @@ class SerialOpenError(Exception):
     
     def __str__(self):
         return self.message
+
+class GoKartSerialConsole(GoKartSerial):
+    """GoKartSerialConsole"""
+    def __init__(self, port='/dev/ttyUSB0', baudrate=9600, rate = 10):
+        super(GoKartSerialConsole, self).__init__(port, baudrate)
+        self.rate = rate
+        self.running = True
+        Thread(target=self.run).start()
+
+    def stop(self):
+        self.running = False
+
+    def run(self):
+        while self.running:
+            data = self.read(readline=True)
+            print(data, end='')
+            time.sleep(1.0/self.rate)
+        
 

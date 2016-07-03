@@ -5,8 +5,11 @@ from __future__ import print_function
 __author__ = 'Rodrigo Muñoz'
 
 import sys
+import signal
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from .serial_interface import GoKartSerialConsole
 
 class GoKartGUI(QWidget):
    def __init__(self, parent = None):
@@ -54,23 +57,36 @@ class GoKartGUI(QWidget):
       self.sl_throttle.setTickInterval(1)
       self.sl_throttle.valueChanged.connect(self.set_throttle)
       layout.addWidget(self.sl_throttle)
+      
+      # Emergency button
+      self.b_emergency = QPushButton('Emergency')
+      self.b_emergency.setCheckable(True)
+      self.b_emergency.setStyleSheet('QPushButton {background-color: #B40404;font-weight: bold; color: #FAFAFA;}')
+      self.b_emergency.clicked.connect(self.set_emergency)
+      layout.addWidget(self.b_emergency)
+
       # Set layout and tittle
       self.setLayout(layout)
       self.setWindowTitle('GoKartGUI')
 
+      # Serial interface
+      self.gokart = GoKartSerialConsole()
+
    def set_stwheel(self):
       value = self.sl_stwheel.value()
-      print('Steering wheel: {}'.format(value))
-
+      self.gokart.set_stwheel(value)
 
    def set_brake(self):
       value = self.sl_brake.value()
-      print('Brake: {}'.format(value))
-
+      self.gokart.set_brake(value)
 
    def set_throttle(self):
       value = self.sl_throttle.value()
-      print('Throttle: {}'.format(value))
+      self.gokart.set_throttle(value)
+
+   def set_emergency(self):
+      value = self.b_emergency.isChecked()
+      self.gokart.set_emergency(value)
 
    @staticmethod
    def run():
