@@ -4,7 +4,7 @@ from __future__ import print_function, division
 
 __author__ = 'Rodrigo Muñoz'
 
-from gokart_serial import GoKartSerial
+from gokart_serial import GoKartSerial, GoKartGUI
 import logging
 import time
 
@@ -18,15 +18,17 @@ class Color:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def main():
+def test_serial():
     gokart = GoKartSerial()
     while True:
-
         data = gokart.read(readline=True)
         print(Color.GREEN + data + Color.ENDC,end='')
         gokart.set_stwheel(25)
         gokart.set_brake(25)
         time.sleep(0.1)
 
+def test_gui():
+    GoKartGUI.run()
+
 if __name__ == '__main__':
-    main()
+    test_gui()
