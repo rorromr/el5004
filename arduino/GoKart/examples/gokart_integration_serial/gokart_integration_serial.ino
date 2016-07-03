@@ -8,7 +8,7 @@ char print_buffer[30];
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Dynamixel.begin(GOKART_DXL_BAUDRATE, GOKART_DXL_CTRL_PIN);
   
   // Check GoKart components
