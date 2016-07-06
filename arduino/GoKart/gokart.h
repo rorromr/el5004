@@ -5,6 +5,7 @@
 #include "rf_interface.h"
 #include "serial_interface.h"
 #include "gokart_msgs.h"
+#include "lcd.h"
 #include "Arduino.h"
 
 // Dynamixel protocol
@@ -55,6 +56,7 @@ namespace GoKart
       Brake brake;
       Throttle thr;
       SteeringWheel sw;
+      LCD lcd;
 
   };
 }
