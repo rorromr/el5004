@@ -3,6 +3,9 @@
 
 namespace GoKart
 {
+
+  RFInterface* RFInterface::_activeFdc = NULL; 
+
   RFInterface::RFInterface(const uint8_t ch_num):
     ch_num_(ch_num)
   {
@@ -20,9 +23,17 @@ namespace GoKart
     // Used for emergency
     pinMode(GOKART_RF_CH3_PIN, INPUT); // Connected to CH6 of the Receiver
 
+    // Set active object
+    _activeFdc = this;
+
+    attachInterrupt(digitalPinToInterrupt(GOKART_RF_CH1_PIN), RFInterface::isr_measure_ch1, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(GOKART_RF_CH2_PIN), RFInterface::isr_measure_ch2, CHANGE);
+
     uptime_[0] = 0UL;
     uptime_[1] = 0UL;
     uptime_[2] = 0UL;
+
+    enableFilter_=true;
 
     for (uint8_t i=0; i <= RF_INTERFACE_BUFFER_SIZE; ++i){
       buffer_uptime0[i]=0UL;
@@ -40,6 +51,36 @@ namespace GoKart
     return true;
   }
 
+  void RFInterface::measure_ch1()
+  {
+    if ( digitalRead( GOKART_RF_CH1_PIN ) == HIGH )
+    {
+     risingTime_ch1 = micros(); //get time of pulse going up
+    }
+    else
+    {
+     fallingTime_ch1 = micros();  //get time of pulse going up
+     injTime_ch1 = fallingTime_ch1 - risingTime_ch1;  //measure time between down and up
+    }
+  } 
+
+  void RFInterface::measure_ch2()
+  {
+    if ( digitalRead( GOKART_RF_CH2_PIN ) == HIGH )
+    {
+     risingTime_ch2 = micros(); //get time of pulse going up
+    }
+    else
+    {
+     fallingTime_ch2 = micros();  //get time of pulse going up
+     injTime_ch2 = fallingTime_ch2 - risingTime_ch2;  //measure time between down and up
+    }
+  } 
+
+  void RFInterface::enableFilter(bool enable){
+    enableFilter_=enable;
+  }
+
   uint32_t RFInterface::meanBuffer(uint32_t *buffer){
     uint32_t result = 0;
     for (uint8_t i=0; i < RF_INTERFACE_BUFFER_SIZE; ++i){
@@ -51,8 +92,8 @@ namespace GoKart
 
   void RFInterface::update()
   {
-    uptime_[0] = pulseIn(GOKART_RF_CH1_PIN, HIGH, 21000);
-    uptime_[1] = pulseIn(GOKART_RF_CH2_PIN, HIGH, 21000);
+    uptime_[0] = injTime_ch1;//pulseIn(GOKART_RF_CH1_PIN, HIGH, 21000);
+    uptime_[1] = injTime_ch2;//pulseIn(GOKART_RF_CH2_PIN, HIGH, 21000);
     uptime_[2] = pulseIn(GOKART_RF_CH3_PIN, HIGH, 21000);
     // @TODO Check timeouts
 
@@ -69,10 +110,17 @@ namespace GoKart
     buffer_uptime2[counter_buffer]=uptime_[2];
 
     //Actualizar valor final del buffer => Ponderacion entre promedio y valor entrante, ponderacion dependiente del DEFINE.
-    buffer_uptime0[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime0) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[0] );
-    buffer_uptime1[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime1) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[1] );
-    buffer_uptime2[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime2) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[2] );
-
+    if (enableFilter_){
+      buffer_uptime0[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime0) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[0] );
+      buffer_uptime1[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime1) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[1] );
+      buffer_uptime2[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime2) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[2] );
+    }
+    else{
+      buffer_uptime0[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) uptime_[0];
+      buffer_uptime1[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) uptime_[1];
+      buffer_uptime2[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) uptime_[2];
+    }
+    
     //ACtualizar contador
     counter_buffer++;
 

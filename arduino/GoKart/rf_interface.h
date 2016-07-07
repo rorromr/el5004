@@ -87,6 +87,30 @@ namespace GoKart
        */
        uint32_t meanBuffer(uint32_t *buffer);
 
+       static RFInterface* _activeFdc;
+
+       static inline void isr_measure_ch1(){
+        _activeFdc->measure_ch1();
+       }
+
+       static inline void isr_measure_ch2(){
+        _activeFdc->measure_ch2();
+       }
+
+       void measure_ch1();
+       void measure_ch2();
+        
+       void enableFilter(bool enable);
+
+        volatile unsigned long risingTime_ch1;  //Time of front raising
+        volatile unsigned long fallingTime_ch1;  //Time of front falling
+
+        volatile unsigned long risingTime_ch2;  //Time of front raising
+        volatile unsigned long fallingTime_ch2;  //Time of front falling
+
+        volatile uint32_t injTime_ch1;  //Time of pulse ch1
+        volatile uint32_t injTime_ch2;  //Time of pulse ch2
+
     private:
       // Total number of channels
       uint8_t ch_num_;
@@ -105,6 +129,7 @@ namespace GoKart
       //Counter buffer
       uint8_t counter_buffer;
 
+      bool enableFilter_;
   };
 }
 
