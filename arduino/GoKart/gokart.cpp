@@ -32,6 +32,9 @@ namespace GoKart
     result = com_->init();
     if (!result) DEBUG_PRINTLN("E/GoKart/init/Communication bad initialization");
 
+    // Init LCD
+    lcd.init();
+
   }
 
   uint8_t GoKartHW::getErrorCode()

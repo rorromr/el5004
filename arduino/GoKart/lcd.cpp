@@ -4,7 +4,7 @@
 namespace GoKart
 {
   LCD::LCD():
-    lcd_(GOKART_LCD_RS, GOKART_LCD_EN, GOKART_LCD_D4, GOKART_LCD_D5, GOKART_LCD_D6, GOKART_LCD_D7),
+    lcd_(GOKART_LCD_RS, GOKART_LCD_EN, GOKART_LCD_DB4, GOKART_LCD_DB5, GOKART_LCD_DB6, GOKART_LCD_DB7),
     servoCount_(0U),
     servoSelected_(0U)
   {}
@@ -41,32 +41,37 @@ namespace GoKart
     servo->ccwLimit = 0U;
   }
 
-  void LCD::printButton()
+  void LCD::test()
   {
     ButtonState btn = getButton();
     String btn_name = "NONE";
     switch(btn)
     {
     case BTN_NONE:
-      btn_name = "NONE";
+      btn_name = "NONE  ";
       break;
     case BTN_UP:
-      btn_name = "UP";
+      btn_name = "UP    ";
       break;     
     case BTN_LEFT:
-      btn_name = "LEFT";
+      btn_name = "LEFT  ";
       break;   
     case BTN_RIGHT:
-      btn_name = "RIGHT";
+      btn_name = "RIGHT ";
       break;  
     case BTN_DOWN:
-      btn_name = "DOWN";
+      btn_name = "DOWN  ";
       break;   
     case BTN_SELECT:
       btn_name = "SELECT";
       break;
     }
-    Serial.println(btn_name);
+    lcd_.setCursor(0,0);
+    lcd_.print("GoKart LCD");
+    lcd_.setCursor(0,1);      // Move to the begining of the second row
+    lcd_.print(btn_name);
+    lcd_.setCursor(8,1);      // Move cursor to second line "1" and 9 spaces over
+    lcd_.print(millis()/1000);// Display seconds elapsed since power-up
   }
 
   void LCD::print()

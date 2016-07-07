@@ -15,13 +15,13 @@
 
 #define GOKART_LCD_BUTTON_PIN A15
 
-#define GOKART_LCD_D4 30
-#define GOKART_LCD_D5 31
-#define GOKART_LCD_D6 32
-#define GOKART_LCD_D7 33
-#define GOKART_LCD_RS 34
-#define GOKART_LCD_EN 35
-#define GOKART_LCD_BLC 36
+#define GOKART_LCD_DB4 30  // 4 Shield
+#define GOKART_LCD_DB5 31  // 5 Shield
+#define GOKART_LCD_DB6 32  // 6 Shield
+#define GOKART_LCD_DB7 33  // 7 Shield
+#define GOKART_LCD_RS 34   // 8 Shield
+#define GOKART_LCD_EN 35   // 9 Shield
+#define GOKART_LCD_BLC 36  // 10 Shield
 
 #define GOKART_LCD_COLS 16
 #define GOKART_LCD_ROWS 2
@@ -63,7 +63,7 @@ namespace GoKart
 
       void print();
 
-      void printButton();
+      void test();
 
     private:
       LiquidCrystal lcd_;
