@@ -34,6 +34,7 @@ arduino
 |       |-- dynamixel_test [Test de motores Dynamixel]
 |       |-- gokart_dynamixel [Test motores Dynamixel usando interfaz GoKart]
 |       |-- gokart_integration [Desarrollo de software principal]
+|       |-- gokart_lcd_test [Test de pantalla LCD]
 |       |-- msg_test [Test de serialización de mensajes]
 |       |-- rf_test [Test de comunicación RF]
 |       |-- rf_test2 [Test de comunicación RF con salida serial más rápida]
