@@ -4,7 +4,7 @@
 namespace GoKart
 {
 
-  RFInterface* RFInterface::_activeFdc = NULL; 
+  RFInterface* RFInterface::_activeRF = NULL; 
 
   RFInterface::RFInterface(const uint8_t ch_num):
     ch_num_(ch_num)
@@ -24,10 +24,12 @@ namespace GoKart
     pinMode(GOKART_RF_CH3_PIN, INPUT); // Connected to CH6 of the Receiver
 
     // Set active object
-    _activeFdc = this;
+    _activeRF = this;
 
-    attachInterrupt(digitalPinToInterrupt(GOKART_RF_CH1_PIN), RFInterface::isr_measure_ch1, CHANGE);
-    attachInterrupt(digitalPinToInterrupt(GOKART_RF_CH2_PIN), RFInterface::isr_measure_ch2, CHANGE);
+    // Attach interrups for PWM capture from receiver
+    attachInterrupt(digitalPinToInterrupt(GOKART_RF_CH1_PIN), RFInterface::isrMeasureCH1, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(GOKART_RF_CH2_PIN), RFInterface::isrMeasureCH2, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(GOKART_RF_CH3_PIN), RFInterface::isrMeasureCH3, CHANGE);
 
     uptime_[0] = 0UL;
     uptime_[1] = 0UL;
@@ -51,33 +53,47 @@ namespace GoKart
     return true;
   }
 
-  void RFInterface::measure_ch1()
+  void RFInterface::measureCH1()
   {
     if ( digitalRead( GOKART_RF_CH1_PIN ) == HIGH )
     {
-     risingTime_ch1 = micros(); //get time of pulse going up
+      risingTimeCH1 = micros(); //get time of pulse going up
     }
     else
     {
-     fallingTime_ch1 = micros();  //get time of pulse going up
-     injTime_ch1 = fallingTime_ch1 - risingTime_ch1;  //measure time between down and up
+      fallingTimeCH1 = micros();  //get time of pulse going up
+      upTimeCH1 = fallingTimeCH1 - risingTimeCH1;  //measure time between down and up
     }
   } 
 
-  void RFInterface::measure_ch2()
+  void RFInterface::measureCH2()
   {
     if ( digitalRead( GOKART_RF_CH2_PIN ) == HIGH )
     {
-     risingTime_ch2 = micros(); //get time of pulse going up
+      risingTimeCH2 = micros(); //get time of pulse going up
     }
     else
     {
-     fallingTime_ch2 = micros();  //get time of pulse going up
-     injTime_ch2 = fallingTime_ch2 - risingTime_ch2;  //measure time between down and up
+      fallingTimeCH2 = micros();  //get time of pulse going up
+      upTimeCH2 = fallingTimeCH2 - risingTimeCH2;  //measure time between down and up
     }
-  } 
+  }
 
-  void RFInterface::enableFilter(bool enable){
+  void RFInterface::measureCH3()
+  {
+    if ( digitalRead( GOKART_RF_CH3_PIN ) == HIGH )
+    {
+      risingTimeCH3 = micros(); //get time of pulse going up
+    }
+    else
+    {
+      fallingTimeCH3 = micros();  //get time of pulse going up
+      upTimeCH3 = fallingTimeCH3 - risingTimeCH3;  //measure time between down and up
+    }
+  }
+
+  void RFInterface::enableFilter(bool enable)
+  {
     enableFilter_=enable;
   }
 
@@ -92,9 +108,9 @@ namespace GoKart
 
   void RFInterface::update()
   {
-    uptime_[0] = injTime_ch1;//pulseIn(GOKART_RF_CH1_PIN, HIGH, 21000);
-    uptime_[1] = injTime_ch2;//pulseIn(GOKART_RF_CH2_PIN, HIGH, 21000);
-    uptime_[2] = pulseIn(GOKART_RF_CH3_PIN, HIGH, 21000);
+    uptime_[0] = upTimeCH1; //pulseIn(GOKART_RF_CH1_PIN, HIGH, 21000);
+    uptime_[1] = upTimeCH2; //pulseIn(GOKART_RF_CH2_PIN, HIGH, 21000);
+    uptime_[2] = upTimeCH3; //pulseIn(GOKART_RF_CH3_PIN, HIGH, 21000);
     // @TODO Check timeouts
 
 

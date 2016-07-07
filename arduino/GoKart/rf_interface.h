@@ -47,69 +47,84 @@ namespace GoKart
       RFInterface(const uint8_t ch_num);
 
       /**
-       * @brief Update all channels.
-       * Usually you call this method in your control loop.
-       */
+      * @brief Update all channels.
+      * Usually you call this method in your control loop.
+      */
       void update();
 
       /**
-       * @brief Get last channel uptime.
-       * Usually called before update() method.
-       *
-       * @param ch Channel
-       * @return Channel uptime (pulse duration)
-       */
+      * @brief Get last channel uptime.
+      * Usually called before update() method.
+      *
+      * @param ch Channel
+      * @return Channel uptime (pulse duration)
+      */
       inline uint32_t getChannel(const uint8_t ch)
       {
         return uptime_[ch];
       }
 
       /**
-       * @brief Fill the command using received data.
-       * Usually called before update() method.
-       *
-       * @param cmd Command to fill
-       */
+      * @brief Fill the command using received data.
+      * Usually called before update() method.
+      *
+      * @param cmd Command to fill
+      */
       virtual void getCommand(DataSerialization::GoKartCommand& cmd);
 
       /**
-       * @brief Initializate and verify communication.
-       *
-       * @return true if the interface is available, false otherwise
-       */
+      * @brief Initializate and verify communication.
+      *
+      * @return true if the interface is available, false otherwise
+      */
       bool init();
 
       /**
-       * @brief Get mean.
-       *
-       * @param buffer Buffer pointer.
-       * @return mean of the buffer.
-       */
-       uint32_t meanBuffer(uint32_t *buffer);
+      * @brief Get mean.
+      *
+      * @param buffer Buffer pointer.
+      * @return mean of the buffer.
+      */
+      uint32_t meanBuffer(uint32_t *buffer);
 
-       static RFInterface* _activeFdc;
+      static RFInterface* _activeRF;
 
-       static inline void isr_measure_ch1(){
-        _activeFdc->measure_ch1();
-       }
+      static inline void isrMeasureCH1()
+      {
+        _activeRF->measureCH1();
+      }
 
-       static inline void isr_measure_ch2(){
-        _activeFdc->measure_ch2();
-       }
+      static inline void isrMeasureCH2()
+      {
+        _activeRF->measureCH2();
+      }
 
-       void measure_ch1();
-       void measure_ch2();
-        
-       void enableFilter(bool enable);
+      static inline void isrMeasureCH3()
+      {
+        _activeRF->measureCH3();
+      }
 
-        volatile unsigned long risingTime_ch1;  //Time of front raising
-        volatile unsigned long fallingTime_ch1;  //Time of front falling
+      uint32_t getTimer2();
 
-        volatile unsigned long risingTime_ch2;  //Time of front raising
-        volatile unsigned long fallingTime_ch2;  //Time of front falling
+      void measureCH1();
+      void measureCH2();
+      void measureCH3();
 
-        volatile uint32_t injTime_ch1;  //Time of pulse ch1
-        volatile uint32_t injTime_ch2;  //Time of pulse ch2
+      void enableFilter(bool enable);
+
+      volatile uint32_t risingTimeCH1;  //Time of front raising
+      volatile uint32_t fallingTimeCH1; //Time of front falling
+      volatile uint32_t upTimeCH1;      //Time of pulse CH1
+
+      volatile uint32_t risingTimeCH2;  //Time of front raising
+      volatile uint32_t fallingTimeCH2; //Time of front falling
+      volatile uint32_t upTimeCH2;      //Time of pulse CH2
+
+      volatile uint32_t risingTimeCH3;  //Time of front raising
+      volatile uint32_t fallingTimeCH3; //Time of front falling
+      volatile uint32_t upTimeCH3;      //Time of pulse CH3
+
+      volatile uint32_t timer2OVF;      //Timer2 overflow count
 
     private:
       // Total number of channels
