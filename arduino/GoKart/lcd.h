@@ -13,14 +13,15 @@
 #include "LiquidCrystal.h"
 #include "dxl_servo.h"
 
-#define GOKART_LCD_BUTTON_PIN A4
+#define GOKART_LCD_BUTTON_PIN A15
 
-#define GOKART_LCD_RS 20
-#define GOKART_LCD_EN 20
-#define GOKART_LCD_D0 20
-#define GOKART_LCD_D1 20
-#define GOKART_LCD_D2 20
-#define GOKART_LCD_D3 20
+#define GOKART_LCD_D4 30
+#define GOKART_LCD_D5 31
+#define GOKART_LCD_D6 32
+#define GOKART_LCD_D7 33
+#define GOKART_LCD_RS 34
+#define GOKART_LCD_EN 35
+#define GOKART_LCD_BLC 36
 
 #define GOKART_LCD_COLS 16
 #define GOKART_LCD_ROWS 2
@@ -61,6 +62,8 @@ namespace GoKart
       bool addServo(DxlServo *s, const char *name);
 
       void print();
+
+      void printButton();
 
     private:
       LiquidCrystal lcd_;
