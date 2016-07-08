@@ -144,5 +144,71 @@ namespace GoKart
     lcd_.print(cmd->throttle.data); 
   }
 
+  void LCD::printConfigMotor(void *data)
+  {
+    if (servoCount_ == 0U) return;
+
+    ButtonState btn = getButton();
+
+    switch(btn)
+    {
+      case BTN_LEFT:
+        servoSelected_ = (servoSelected_+1U) > (servoCount_-1U) ? servoSelected_ : (servoSelected_+1U);
+        break;
+      case BTN_RIGHT:
+        servoSelected_ = servoSelected_ > 0 ? (servoSelected_-1U) : 0U;
+        break;
+    }
+
+    ServoInfo* servo = &servoInfo_[servoSelected_];
+    // Update values
+    servo->pos = servo->servo->getPosition();
+    servo->cwLimit = servo->servo->getCWLimit();
+    servo->ccwLimit = servo->servo->getCCWLimit();
+
+    // Update potenciometer value
+    updatePot();
+    
+    // Map values
+    uint16_t pos = 4*potPos_;
+    uint16_t cw = 4*potCW_;
+    uint16_t ccw = 4*potCCW_;
+
+    // First row: Name and position
+    lcd_.setCursor(0, 0);
+    lcd_.print(servo->name);
+    lcd_.setCursor(5, 0);
+    lcd_.print("Pos:");
+    lcd_.setCursor(9, 0);
+    lcd_.print(pos);
+    // Second row: CW and CCW limit
+    lcd_.setCursor(0, 1);
+    lcd_.print("CW:");
+    lcd_.setCursor(3, 1);
+    lcd_.print(cw);
+    lcd_.setCursor(8, 1);
+    lcd_.print("CCW:");
+    lcd_.setCursor(11, 1);
+    lcd_.print(ccw);
+
+    btn = getButton();
+    if (btn == BTN_SELECT)
+    {
+      uint16_t result;
+      lcd_.clear();
+      lcd_.setCursor(0, 0);
+      lcd_.print("Save config");
+      servo->servo->move(pos);
+      result = servo->servo->setCWLimit(cw);
+      result += servo->servo->setCCWLimit(ccw);
+      delay(500);
+      lcd_.clear();
+      lcd_.setCursor(0, 0);
+      if (result) lcd_.print("Fail!");
+      else lcd_.print("Done!");
+      delay(500);
+    }
+  }
+
 }
 

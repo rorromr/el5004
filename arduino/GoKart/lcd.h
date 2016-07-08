@@ -40,9 +40,9 @@ namespace GoKart
   {
     DxlServo *servo;
     char name[4];
-    uint16_t pos;
-    uint16_t cwLimit;
-    uint16_t ccwLimit;
+    int16_t pos;
+    int16_t cwLimit;
+    int16_t ccwLimit;
   } ServoInfo;
 
   typedef enum
@@ -71,6 +71,8 @@ namespace GoKart
       void printConfig(void *data);
 
       void printCommand(void *data);
+
+      void printConfigMotor(void *data);
 
       void test();
 
