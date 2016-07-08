@@ -62,6 +62,8 @@ namespace GoKart
 
       int16_t setCWLimit(uint16_t limit);
 
+      void setTorque(bool torque_enable);
+
       void moveToZero();
 
       bool check();

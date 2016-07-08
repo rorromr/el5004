@@ -20,9 +20,9 @@ namespace GoKart
 
   void LCD::updatePot()
   {
-    potPos_ = analogRead(GOKART_POT1_PIN);
-    potCW_ = analogRead(GOKART_POT2_PIN);
-    potCCW_ = analogRead(GOKART_POT3_PIN);
+    potPos_ = analogRead(A0);
+    potCW_ = analogRead(A1);
+    potCCW_ = analogRead(A2);
   }
 
   ButtonState LCD::getButton()
@@ -54,6 +54,7 @@ namespace GoKart
   void LCD::test()
   {
     ButtonState btn = getButton();
+    updatePot();
     char btn_name[7] = "NONE  ";
     switch(btn)
     {
@@ -76,8 +77,15 @@ namespace GoKart
       strcpy(btn_name, "SELECT");
       break;
     }
+    // Print pot values
+    // @TODO Check print
     lcd_.setCursor(0,0);
-    lcd_.print("GoKart LCD");
+    lcd_.print(potPos_);
+    lcd_.setCursor(5,0);
+    lcd_.print(potCW_);
+    lcd_.setCursor(11,0);
+    lcd_.print(potCCW_);
+
     lcd_.setCursor(0,1);      // Move to the begining of the second row
     lcd_.print(btn_name);
     lcd_.setCursor(8,1);      // Move cursor to second line "1" and 9 spaces over

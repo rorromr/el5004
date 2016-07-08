@@ -13,8 +13,8 @@
 #define GOKART_DXL_CTRL_PIN 4
 
 // Actuators IDs
-#define GOKART_BRAKE_ID 2
-#define GOKART_THROTTLE_ID 3
+#define GOKART_BRAKE_ID 3
+#define GOKART_THROTTLE_ID 2
 #define GOKART_STEERINGWHEEL_ID 1
 
 namespace GoKart

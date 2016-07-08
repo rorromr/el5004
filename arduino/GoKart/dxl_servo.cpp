@@ -77,6 +77,12 @@ namespace GoKart
     return dxl_->setCWLimit(id_, limit);
   }
 
+  void setTorque(bool torque_enable)
+  {
+    ;
+  }
+
+
   bool DxlServo::check()
   {
     DEBUG_PRINTLN("D/DxlServo/check/");
