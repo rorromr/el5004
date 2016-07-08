@@ -6,13 +6,23 @@ namespace GoKart
   LCD::LCD():
     lcd_(GOKART_LCD_RS, GOKART_LCD_EN, GOKART_LCD_DB4, GOKART_LCD_DB5, GOKART_LCD_DB6, GOKART_LCD_DB7),
     servoCount_(0U),
-    servoSelected_(0U)
+    servoSelected_(0U),
+    potPos_(0U),
+    potCW_(0U),
+    potCCW_(0U)
   {}
 
   bool LCD::init()
   {
     lcd_.begin(GOKART_LCD_COLS, GOKART_LCD_ROWS);
     return true;
+  }
+
+  void LCD::updatePot()
+  {
+    potPos_ = analogRead(GOKART_POT1_PIN);
+    potCW_ = analogRead(GOKART_POT2_PIN);
+    potCCW_ = analogRead(GOKART_POT3_PIN);
   }
 
   ButtonState LCD::getButton()
@@ -44,26 +54,26 @@ namespace GoKart
   void LCD::test()
   {
     ButtonState btn = getButton();
-    String btn_name = "NONE";
+    char btn_name[7] = "NONE  ";
     switch(btn)
     {
     case BTN_NONE:
-      btn_name = "NONE  ";
+      strcpy(btn_name, "NONE  ");
       break;
     case BTN_UP:
-      btn_name = "UP    ";
+      strcpy(btn_name, "UP    ");
       break;     
     case BTN_LEFT:
-      btn_name = "LEFT  ";
+      strcpy(btn_name, "LEFT  ");
       break;   
     case BTN_RIGHT:
-      btn_name = "RIGHT ";
+      strcpy(btn_name, "RIGHT ");
       break;  
     case BTN_DOWN:
-      btn_name = "DOWN  ";
+      strcpy(btn_name, "DOWN  ");
       break;   
     case BTN_SELECT:
-      btn_name = "SELECT";
+      strcpy(btn_name, "SELECT");
       break;
     }
     lcd_.setCursor(0,0);
@@ -74,7 +84,7 @@ namespace GoKart
     lcd_.print(millis()/1000);// Display seconds elapsed since power-up
   }
 
-  void LCD::print()
+  void LCD::printConfig(void *data)
   {
     if (servoCount_ == 0U) return;
 
@@ -93,8 +103,8 @@ namespace GoKart
     ServoInfo* servo = &servoInfo_[servoSelected_];
     // Update values
     servo->pos = servo->servo->getPosition();
-    servo->cwLimit = servo->servo->getPosition();// @TODO
-    servo->ccwLimit = servo->servo->getPosition();// @TODO
+    servo->cwLimit = servo->servo->getCWLimit();
+    servo->ccwLimit = servo->servo->getCCWLimit();
     
     // First row: Name and position
     lcd_.setCursor(0, 0);
@@ -112,8 +122,26 @@ namespace GoKart
     lcd_.print("CCW:");
     lcd_.setCursor(11, 1);
     lcd_.print(servo->ccwLimit);
-    
+  }
 
+  void LCD::printCommand(void *data)
+  {
+    DataSerialization::GoKartCommand* cmd = (DataSerialization::GoKartCommand*) data;
+    // First row: steering wheel and emergency
+    lcd_.setCursor(0, 0);
+    lcd_.print("SW: ");
+    lcd_.print(cmd->stwheel.data);
+    lcd_.setCursor(8, 0);
+    lcd_.print("E: ");
+    lcd_.print(cmd->emergency.data);
+
+    // Second row: brake and throttle
+    lcd_.setCursor(0, 1);
+    lcd_.print("BK: ");
+    lcd_.print(cmd->brake.data);
+    lcd_.setCursor(8, 1);
+    lcd_.print("TH:");
+    lcd_.print(cmd->throttle.data); 
   }
 
 }

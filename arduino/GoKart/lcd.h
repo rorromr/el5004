@@ -12,6 +12,7 @@
 
 #include "LiquidCrystal.h"
 #include "dxl_servo.h"
+#include "gokart_msgs.h"
 
 #define GOKART_LCD_BUTTON_PIN A15
 
@@ -25,6 +26,10 @@
 
 #define GOKART_LCD_COLS 16
 #define GOKART_LCD_ROWS 2
+
+#define GOKART_POT1_PIN A1
+#define GOKART_POT2_PIN A2
+#define GOKART_POT3_PIN A3
 
 #define GO_KART_LCD_MAX_SERVO 3
 
@@ -59,9 +64,13 @@ namespace GoKart
 
       ButtonState getButton();
 
+      void updatePot();
+
       bool addServo(DxlServo *s, const char *name);
 
-      void print();
+      void printConfig(void *data);
+
+      void printCommand(void *data);
 
       void test();
 
@@ -70,6 +79,10 @@ namespace GoKart
       uint8_t servoCount_;
       uint8_t servoSelected_;
       ServoInfo servoInfo_[GO_KART_LCD_MAX_SERVO];
+      // Potenciometer value
+      uint16_t potPos_;
+      uint16_t potCW_;
+      uint16_t potCCW_;
 
   };
 }

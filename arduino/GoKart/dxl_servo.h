@@ -54,6 +54,10 @@ namespace GoKart
 
       int16_t getPosition();
 
+      uint16_t getCCWLimit();
+
+      uint16_t getCWLimit();
+
       void moveToZero();
 
       bool check();
