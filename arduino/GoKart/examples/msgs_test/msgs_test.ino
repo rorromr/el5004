@@ -2,6 +2,7 @@
 #include <assert.h>
 
 #include "DynamixelSerial1.h"
+#include "LiquidCrystal.h"
 #include "gokart.h"
 
 DataSerialization::GoKartCommand cmd1, cmd2;

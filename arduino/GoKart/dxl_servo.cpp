@@ -56,6 +56,32 @@ namespace GoKart
   {
     dxl_->move(id_,zero_);
   }
+  
+  int16_t DxlServo::getCCWLimit()
+  {
+    return dxl_->readCCWLimit(id_);
+  }
+
+  int16_t DxlServo::getCWLimit()
+  {
+    return dxl_->readCCWLimit(id_);
+  }
+
+  int16_t DxlServo::setCCWLimit(uint16_t limit)
+  {
+    return dxl_->setCCWLimit(id_, limit);
+  }
+
+  int16_t DxlServo::setCWLimit(uint16_t limit)
+  {
+    return dxl_->setCWLimit(id_, limit);
+  }
+
+  int16_t DxlServo::torqueEnable(bool torque_enable)
+  {
+    return dxl_->torqueStatus(id_, torque_enable);
+  }
+
 
   bool DxlServo::check()
   {

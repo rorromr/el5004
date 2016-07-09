@@ -1,4 +1,5 @@
 #define DEBUG_GOKART
+#include "LiquidCrystal.h"
 #include "DynamixelSerial1.h"
 #include "gokart.h"
 

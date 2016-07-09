@@ -1,4 +1,5 @@
 #include "DynamixelSerial1.h"
+#include "LiquidCrystal.h"
 #include "gokart.h"
 #include <stdio.h>
 

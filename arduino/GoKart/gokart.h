@@ -5,6 +5,7 @@
 #include "rf_interface.h"
 #include "serial_interface.h"
 #include "gokart_msgs.h"
+#include "lcd.h"
 #include "Arduino.h"
 
 // Dynamixel protocol
@@ -12,8 +13,8 @@
 #define GOKART_DXL_CTRL_PIN 4
 
 // Actuators IDs
-#define GOKART_BRAKE_ID 2
-#define GOKART_THROTTLE_ID 3
+#define GOKART_BRAKE_ID 3
+#define GOKART_THROTTLE_ID 2
 #define GOKART_STEERINGWHEEL_ID 1
 
 namespace GoKart
@@ -55,6 +56,7 @@ namespace GoKart
       Brake brake;
       Throttle thr;
       SteeringWheel sw;
+      LCD lcd;
 
   };
 }

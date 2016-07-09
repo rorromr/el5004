@@ -1,4 +1,5 @@
 #include "DynamixelSerial1.h"
+#include "LiquidCrystal.h"
 #include "gokart.h"
 
 GoKart::RFInterface rf(GOKART_RF_CH_NUM);
