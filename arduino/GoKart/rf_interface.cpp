@@ -108,12 +108,11 @@ namespace GoKart
 
   void RFInterface::update()
   {
+    // @TODO Check timeouts and data consistency
     uptime_[0] = upTimeCH1; //pulseIn(GOKART_RF_CH1_PIN, HIGH, 21000);
     uptime_[1] = upTimeCH2; //pulseIn(GOKART_RF_CH2_PIN, HIGH, 21000);
     uptime_[2] = upTimeCH3; //pulseIn(GOKART_RF_CH3_PIN, HIGH, 21000);
-    // @TODO Check timeouts
-
-
+    
     //Reiniciar contador de buffer ("puntero"), de ser necesario
     if (counter_buffer == RF_INTERFACE_BUFFER_SIZE)
     {
