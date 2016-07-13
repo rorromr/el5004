@@ -27,7 +27,7 @@ namespace GoKart
 
   void Throttle::release()
   {
-    dxl_->move(id_,zero_);
+    dxl_->move(id_,min_);
   }
 
 }
