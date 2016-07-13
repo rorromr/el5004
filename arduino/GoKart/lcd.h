@@ -74,6 +74,8 @@ namespace GoKart
 
       void printConfigMotor(void *data);
 
+      void clear();
+
       void test();
 
     private:

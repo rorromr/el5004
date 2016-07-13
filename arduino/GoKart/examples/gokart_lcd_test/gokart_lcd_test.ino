@@ -22,4 +22,5 @@ void loop()
 {
   gokart.lcd.test();
   delay(50);
+  gokart.lcd.clear();
 }

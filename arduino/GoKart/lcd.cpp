@@ -218,5 +218,10 @@ namespace GoKart
     }
   }
 
+  void LCD::clear()
+  {
+    lcd_.clear();
+  }
+
 }
 
