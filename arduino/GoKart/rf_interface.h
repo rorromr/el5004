@@ -27,9 +27,11 @@
 #define RF_INTERFACE_BUFFER_SIZE 10
 #define RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT 0.2
 
+#define RF_INTERFACE_ERROR_COUNTER_MAX 10
 
 #define GOKART_RF_EMERGENCY_MIN 900
 #define GOKART_RF_EMERGENCY_MAX 1900
+#define GOKART_RF_EMERGENCY_DELTA 100
 
 #define GOKART_RF_STWHEEL_MIN 990
 #define GOKART_RF_STWHEEL_MAX 1965
@@ -137,12 +139,15 @@ namespace GoKart
       uint32_t uptime_[RF_INTERFACE_MAX_CH];
 
       // Buffer filter for every channel-command
-      uint32_t buffer_uptime0[RF_INTERFACE_BUFFER_SIZE+1];
-      uint32_t buffer_uptime1[RF_INTERFACE_BUFFER_SIZE+1];
-      uint32_t buffer_uptime2[RF_INTERFACE_BUFFER_SIZE+1];
+      uint32_t buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE+1];
+      uint32_t buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE+1];
+      uint32_t buffer_uptimeCH3[RF_INTERFACE_BUFFER_SIZE+1];
 
       //Counter buffer
       uint8_t counter_buffer;
+
+      //Error counter
+      uint8_t counter_error;
 
       bool enableFilter_;
   };
