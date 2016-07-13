@@ -104,7 +104,7 @@ namespace GoKart
         servoSelected_ = (servoSelected_+1U) > (servoCount_-1U) ? servoSelected_ : (servoSelected_+1U);
         break;
       case BTN_RIGHT:
-        servoSelected_ = servoSelected_ > 0 ? (servoSelected_-1U) : 0U;
+        servoSelected_ = servoSelected_ > 0U ? (servoSelected_-1U) : 0U;
         break;
     }
 
@@ -139,7 +139,7 @@ namespace GoKart
     lcd_.setCursor(0, 0);
     lcd_.print("SW: ");
     lcd_.print(cmd->stwheel.data);
-    lcd_.setCursor(8, 0);
+    lcd_.setCursor(9, 0);
     lcd_.print("E: ");
     lcd_.print(cmd->emergency.data);
 

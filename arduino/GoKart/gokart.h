@@ -45,6 +45,8 @@ namespace GoKart
 
       void printCommand();
 
+      void printCommandLCD();
+
       //void setSerial();
 
     private:

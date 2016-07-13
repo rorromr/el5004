@@ -83,4 +83,10 @@ namespace GoKart
     Serial.println();
   }
 
+  void GoKartHW::printCommandLCD()
+  {
+    lcd.clear();
+    lcd.printCommand(&cmd_);
+  }
+
 }
