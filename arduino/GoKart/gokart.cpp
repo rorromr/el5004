@@ -34,7 +34,16 @@ namespace GoKart
 
     // Init LCD
     lcd.init();
-
+    // Add servos
+    result = lcd.addServo(&brake, "BR");
+    if (!result) DEBUG_PRINTLN("E/GoKart/init/Fail to add brake servo to LCD");
+    result = lcd.addServo(&thr, "TH");
+    if (!result) DEBUG_PRINTLN("E/GoKart/init/Fail to add throttle servo to LCD");
+    result = lcd.addServo(&sw, "SW");
+    if (!result) DEBUG_PRINTLN("E/GoKart/init/Fail to add stwheel servo to LCD");
+    // @TODO Hardcoded return
+    DEBUG_PRINTLN("I/GoKart/init/GoKart init [OK]");
+    return true;
   }
 
   uint8_t GoKartHW::getErrorCode()

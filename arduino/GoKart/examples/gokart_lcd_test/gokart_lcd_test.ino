@@ -20,7 +20,7 @@ void setup()
 
 void loop()
 {
-  gokart.lcd.test();
+  gokart.lcd.printTest(NULL);
   delay(50);
   gokart.lcd.clear();
 }

@@ -64,6 +64,8 @@ namespace GoKart
 
       int16_t torqueEnable(bool torque_enable);
 
+      int16_t getLoad();
+
       void moveToZero();
 
       bool check();

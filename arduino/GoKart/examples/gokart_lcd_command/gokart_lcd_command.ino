@@ -29,10 +29,10 @@ void loop()
     Serial.println("ON EMERGENCY!");
     delay(100);
     gokart.updateCommand();
-    gokart.printCommandLCD();
+    gokart.lcd.printMenu(&gokart.cmd_);
   }
 
   // Set actuators
   gokart.setCommand();
-  gokart.printCommandLCD();
+  gokart.lcd.printMenu(&gokart.cmd_);
 }
