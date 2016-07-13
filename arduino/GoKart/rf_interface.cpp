@@ -4,7 +4,7 @@
 namespace GoKart
 {
 
-  RFInterface* RFInterface::_activeRF = NULL; 
+  RFInterface* RFInterface::_activeRF = NULL;
 
   RFInterface::RFInterface(const uint8_t ch_num):
     ch_num_(ch_num)
@@ -38,19 +38,24 @@ namespace GoKart
     enableFilter_=true;
 
     for (uint8_t i=0; i <= RF_INTERFACE_BUFFER_SIZE; ++i){
-      buffer_uptime0[i]=0UL;
-      buffer_uptime1[i]=0UL;
-      buffer_uptime2[i]=0UL;
+      buffer_uptimeCH1[i]=0UL;
+      buffer_uptimeCH2[i]=0UL;
+      buffer_uptimeCH3[i]=0UL;
     }
 
     counter_buffer= 0;
+    counter_error= RF_INTERFACE_ERROR_COUNTER_MAX*2;
 
   }
 
   bool RFInterface::init()
   {
     // @TODO Verify status! data received?
-    return true;
+    while (true){
+      if (RFInterface::isConsistency()){
+        return true;
+      }
+    }
   }
 
   void RFInterface::measureCH1()
@@ -64,7 +69,7 @@ namespace GoKart
       fallingTimeCH1 = micros();  //get time of pulse going up
       upTimeCH1 = fallingTimeCH1 - risingTimeCH1;  //measure time between down and up
     }
-  } 
+  }
 
   void RFInterface::measureCH2()
   {
@@ -106,13 +111,45 @@ namespace GoKart
     return result;
   }
 
+  bool RFInterface::updateConsistencyError(uint32_t upTimeCH1, uint32_t upTimeCH2, uint32_t upTimeCH3 ){
+    if (  (upTimeCH1 < (GOKART_RF_STWHEEL_MIN - GOKART_RF_STWHEEL_DELTA)) || (upTimeCH1 > (GOKART_RF_STWHEEL_MAX + GOKART_RF_STWHEEL_DELTA)) )     {
+      if (  (upTimeCH2 < (GOKART_RF_BRAKE_THROTTLE_MIN - GOKART_RF_BRAKE_THROTTLE_DELTA)) || (upTimeCH2 > (GOKART_RF_BRAKE_THROTTLE_MAX + GOKART_RF_BRAKE_THROTTLE_DELTA)) )     {
+        if (  (upTimeCH3 < (GOKART_RF_EMERGENCY_MIN - GOKART_RF_EMERGENCY_DELTA)) || (upTimeCH3 > (GOKART_RF_EMERGENCY_MAX + GOKART_RF_EMERGENCY_DELTA)) )     {
+          if (counter_error>0){
+            counter_error--;
+          }
+          return true;
+        }
+      }
+    }
+
+    if (counter_error < RF_INTERFACE_ERROR_COUNTER_MAX*2){
+      counter_error++;
+    }
+    return false;
+  }
+
+  bool RFInterface::isConsistency(){
+    if (counter_error > RF_INTERFACE_ERROR_COUNTER_MAX){
+      return false;
+    }
+    return true;
+  }
+
   void RFInterface::update()
   {
-    // @TODO Check timeouts and data consistency
+    //Analizar consistencia de datos y aumentar/disminuir contador
+    bool current_consistency= RFInterface::updateConsistencyError(uint32_t upTimeCH1, uint32_t upTimeCH2, uint32_t upTimeCH3 );
+
+    // Si los datos no son consistentes, entonces no actualizo el buffer de datos
+    if (!current_consistency){
+      return;
+    }
+
     uptime_[0] = upTimeCH1; //pulseIn(GOKART_RF_CH1_PIN, HIGH, 21000);
     uptime_[1] = upTimeCH2; //pulseIn(GOKART_RF_CH2_PIN, HIGH, 21000);
     uptime_[2] = upTimeCH3; //pulseIn(GOKART_RF_CH3_PIN, HIGH, 21000);
-    
+
     //Reiniciar contador de buffer ("puntero"), de ser necesario
     if (counter_buffer == RF_INTERFACE_BUFFER_SIZE)
     {
@@ -120,22 +157,22 @@ namespace GoKart
     }
 
     //Actualizar buffer con valor nuevo y eliminando el mas antiguo
-    buffer_uptime0[counter_buffer]=uptime_[0];
-    buffer_uptime1[counter_buffer]=uptime_[1];
-    buffer_uptime2[counter_buffer]=uptime_[2];
+    buffer_uptimeCH1[counter_buffer]=uptime_[0];
+    buffer_uptimeCH2[counter_buffer]=uptime_[1];
+    buffer_uptimeCH3[counter_buffer]=uptime_[2];
 
     //Actualizar valor final del buffer => Ponderacion entre promedio y valor entrante, ponderacion dependiente del DEFINE.
     if (enableFilter_){
-      buffer_uptime0[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime0) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[0] );
-      buffer_uptime1[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime1) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[1] );
-      buffer_uptime2[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptime2) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[2] );
+      buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptimeCH1) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[0] );
+      buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptimeCH2) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[1] );
+      buffer_uptimeCH3[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) ( (1-RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT)* RFInterface::meanBuffer(buffer_uptimeCH3) + RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT*uptime_[2] );
     }
     else{
-      buffer_uptime0[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) uptime_[0];
-      buffer_uptime1[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) uptime_[1];
-      buffer_uptime2[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) uptime_[2];
+      buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) uptime_[0];
+      buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) uptime_[1];
+      buffer_uptimeCH3[RF_INTERFACE_BUFFER_SIZE] = (uint32_t) uptime_[2];
     }
-    
+
     //ACtualizar contador
     counter_buffer++;
 
@@ -146,17 +183,23 @@ namespace GoKart
   {
     update(); //Updatea canales del transmisor
 
+    //Si se cumple la condicion de inconsistencia de datos, entonces seteo estado de emergencia.
+    if (!RFInterface::isConsistency()){
+      cmd.emergency.data = (uint8_t) 1;
+      return;
+    }
+
     //Stwheel match
     int medium_stwheel= round((GOKART_RF_STWHEEL_MIN + GOKART_RF_STWHEEL_MAX)/2);
     int left_max= medium_stwheel - round(GOKART_RF_STWHEEL_DELTA/2);
     int right_min= medium_stwheel + round(GOKART_RF_STWHEEL_DELTA/2);
-    if (buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]<= left_max)
+    if (buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE]<= left_max)
     {
-      cmd.stwheel.data = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_STWHEEL_MIN ? (uint8_t) -128 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_STWHEEL_MIN, left_max, -128, 0);
+      cmd.stwheel.data = buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_STWHEEL_MIN ? (uint8_t) -128 : (uint8_t) map(buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_STWHEEL_MIN, left_max, -128, 0);
     }
-    else if (buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]>= right_min)
+    else if (buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE]>= right_min)
     {
-      cmd.stwheel.data = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 127 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], right_min, GOKART_RF_STWHEEL_MAX, 0, 127);
+      cmd.stwheel.data = buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 127 : (uint8_t) map(buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE], right_min, GOKART_RF_STWHEEL_MAX, 0, 127);
     }
     else
     {
@@ -168,14 +211,14 @@ namespace GoKart
     int medium_brake_throttle= round((GOKART_RF_BRAKE_THROTTLE_MIN + GOKART_RF_BRAKE_THROTTLE_MAX)/2);
     int brake_max= medium_brake_throttle - round(GOKART_RF_BRAKE_THROTTLE_DELTA/2);
     int throttle_min= medium_brake_throttle + round(GOKART_RF_BRAKE_THROTTLE_DELTA/2);
-    if (buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]<= brake_max)
+    if (buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE]<= brake_max)
     {
-      cmd.brake.data = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_BRAKE_THROTTLE_MIN ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_BRAKE_THROTTLE_MIN, brake_max, 255, 0);
+      cmd.brake.data = buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_BRAKE_THROTTLE_MIN ? (uint8_t) 255 : (uint8_t) map(buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_BRAKE_THROTTLE_MIN, brake_max, 255, 0);
       cmd.throttle.data = (uint8_t) 0;
     }
-    else if (buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]>= throttle_min)
+    else if (buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE]>= throttle_min)
     {
-      cmd.throttle.data = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_BRAKE_THROTTLE_MAX ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], throttle_min, GOKART_RF_BRAKE_THROTTLE_MAX, 0, 255);
+      cmd.throttle.data = buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_BRAKE_THROTTLE_MAX ? (uint8_t) 255 : (uint8_t) map(buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE], throttle_min, GOKART_RF_BRAKE_THROTTLE_MAX, 0, 255);
       cmd.brake.data = (uint8_t) 0;
     }
     else{
@@ -186,7 +229,7 @@ namespace GoKart
 
     //Emergency match
     int medium_emergency= (GOKART_RF_EMERGENCY_MIN + GOKART_RF_EMERGENCY_MAX)/2;
-    if ( buffer_uptime2[RF_INTERFACE_BUFFER_SIZE]>medium_emergency )
+    if ( buffer_uptimeCH3[RF_INTERFACE_BUFFER_SIZE]>medium_emergency )
     {
       cmd.emergency.data = (uint8_t) 1;
     }
