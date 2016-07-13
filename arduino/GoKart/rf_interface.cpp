@@ -46,6 +46,10 @@ namespace GoKart
     counter_buffer= 0;
     counter_error= RF_INTERFACE_ERROR_COUNTER_MAX*2;
 
+    flagInterruptCH1=false;
+    flagInterruptCH2=false;
+    flagInterruptCH3=false;
+
   }
 
   bool RFInterface::init()
@@ -68,6 +72,7 @@ namespace GoKart
     {
       fallingTimeCH1 = micros();  //get time of pulse going up
       upTimeCH1 = fallingTimeCH1 - risingTimeCH1;  //measure time between down and up
+      flagInterruptCH1=true;
     }
   }
 
@@ -81,6 +86,7 @@ namespace GoKart
     {
       fallingTimeCH2 = micros();  //get time of pulse going up
       upTimeCH2 = fallingTimeCH2 - risingTimeCH2;  //measure time between down and up
+      flagInterruptCH2=true;
     }
   }
 
@@ -94,6 +100,7 @@ namespace GoKart
     {
       fallingTimeCH3 = micros();  //get time of pulse going up
       upTimeCH3 = fallingTimeCH3 - risingTimeCH3;  //measure time between down and up
+      flagInterruptCH3=true;
     }
   }
 
@@ -112,9 +119,9 @@ namespace GoKart
   }
 
   bool RFInterface::updateConsistencyError(uint32_t upTimeCH1, uint32_t upTimeCH2, uint32_t upTimeCH3 ){
-    if (  (upTimeCH1 < (GOKART_RF_STWHEEL_MIN - GOKART_RF_STWHEEL_DELTA)) || (upTimeCH1 > (GOKART_RF_STWHEEL_MAX + GOKART_RF_STWHEEL_DELTA)) )     {
-      if (  (upTimeCH2 < (GOKART_RF_BRAKE_THROTTLE_MIN - GOKART_RF_BRAKE_THROTTLE_DELTA)) || (upTimeCH2 > (GOKART_RF_BRAKE_THROTTLE_MAX + GOKART_RF_BRAKE_THROTTLE_DELTA)) )     {
-        if (  (upTimeCH3 < (GOKART_RF_EMERGENCY_MIN - GOKART_RF_EMERGENCY_DELTA)) || (upTimeCH3 > (GOKART_RF_EMERGENCY_MAX + GOKART_RF_EMERGENCY_DELTA)) )     {
+    if (  (upTimeCH1 > (GOKART_RF_STWHEEL_MIN - GOKART_RF_STWHEEL_DELTA)) && (upTimeCH1 < (GOKART_RF_STWHEEL_MAX + GOKART_RF_STWHEEL_DELTA)) )     {
+      if (  (upTimeCH2 > (GOKART_RF_BRAKE_THROTTLE_MIN - GOKART_RF_BRAKE_THROTTLE_DELTA)) && (upTimeCH2 < (GOKART_RF_BRAKE_THROTTLE_MAX + GOKART_RF_BRAKE_THROTTLE_DELTA)) )     {
+        if (  (upTimeCH3 > (GOKART_RF_EMERGENCY_MIN - GOKART_RF_EMERGENCY_DELTA)) && (upTimeCH3 < (GOKART_RF_EMERGENCY_MAX + GOKART_RF_EMERGENCY_DELTA)) )     {
           if (counter_error>0){
             counter_error--;
           }
@@ -136,10 +143,47 @@ namespace GoKart
     return true;
   }
 
+  uint8_t RFInterface::isFlagActivated(){
+    if (flagInterruptCH1 && flagInterruptCH2 && flagInterruptCH3){
+      return 2;
+    }
+    else if(flagInterruptCH1 || flagInterruptCH2 || flagInterruptCH3){
+      return 1;
+    }
+    else{
+      return 0;  
+    }
+    
+  }
+
   void RFInterface::update()
   {
+    noInterrupts();
+    if (RFInterface::isFlagActivated()==2){
+      flagInterruptCH1=false;
+      flagInterruptCH2=false;
+      flagInterruptCH3=false;
+      interrupts();
+    }
+    else if (RFInterface::isFlagActivated()==0){
+      upTimeCH1=0UL;
+      upTimeCH2=0UL;
+      upTimeCH3=0UL;
+
+      uptime_[0]=0UL;
+      uptime_[1]=0UL;
+      uptime_[2]=0UL;
+
+      interrupts();
+    }
+    else{
+      interrupts();
+      return;
+    }
+    
+
     //Analizar consistencia de datos y aumentar/disminuir contador
-    bool current_consistency= RFInterface::updateConsistencyError(uint32_t upTimeCH1, uint32_t upTimeCH2, uint32_t upTimeCH3 );
+    bool current_consistency= RFInterface::updateConsistencyError(upTimeCH1,upTimeCH2,upTimeCH3 );
 
     // Si los datos no son consistentes, entonces no actualizo el buffer de datos
     if (!current_consistency){
