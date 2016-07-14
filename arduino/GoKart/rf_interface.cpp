@@ -112,6 +112,11 @@ namespace GoKart
     uptime_[0] = upTimeCH1; //pulseIn(GOKART_RF_CH1_PIN, HIGH, 21000);
     uptime_[1] = upTimeCH2; //pulseIn(GOKART_RF_CH2_PIN, HIGH, 21000);
     uptime_[2] = upTimeCH3; //pulseIn(GOKART_RF_CH3_PIN, HIGH, 21000);
+
+    //Guarda valores antiguos;
+    CH1antiguo=upTimeCH1;
+    CH2antiguo=upTimeCH2;
+    CH3antiguo=upTimeCH3;
     
     //Reiniciar contador de buffer ("puntero"), de ser necesario
     if (counter_buffer == RF_INTERFACE_BUFFER_SIZE)
@@ -145,54 +150,72 @@ namespace GoKart
   void RFInterface::getCommand(DataSerialization::GoKartCommand& cmd)
   {
     update(); //Updatea canales del transmisor
-
-    //Stwheel match
-    int medium_stwheel= round((GOKART_RF_STWHEEL_MIN + GOKART_RF_STWHEEL_MAX)/2);
-    int left_max= medium_stwheel - round(GOKART_RF_STWHEEL_DELTA/2);
-    int right_min= medium_stwheel + round(GOKART_RF_STWHEEL_DELTA/2);
-    if (buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]<= left_max)
-    {
-      cmd.stwheel.data = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_STWHEEL_MIN ? (uint8_t) -128 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_STWHEEL_MIN, left_max, -128, 0);
-    }
-    else if (buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]>= right_min)
-    {
-      cmd.stwheel.data = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 127 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], right_min, GOKART_RF_STWHEEL_MAX, 0, 127);
-    }
-    else
-    {
-      cmd.stwheel.data = (uint8_t) 0;
+    bool apagado=false;
+    //Verifica si mensajes cambian
+    if (CH1antiguo==buffer_uptime0[RF_INTERFACE_BUFFER_SIZE] && CH2antiguo==buffer_uptime1[RF_INTERFACE_BUFFER_SIZE] && CH3antiguo==buffer_uptime2[RF_INTERFACE_BUFFER_SIZE]){
+      contador++;
     }
 
-
-    //Brake & Throttle match
-    int medium_brake_throttle= round((GOKART_RF_BRAKE_THROTTLE_MIN + GOKART_RF_BRAKE_THROTTLE_MAX)/2);
-    int brake_max= medium_brake_throttle - round(GOKART_RF_BRAKE_THROTTLE_DELTA/2);
-    int throttle_min= medium_brake_throttle + round(GOKART_RF_BRAKE_THROTTLE_DELTA/2);
-    if (buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]<= brake_max)
-    {
-      cmd.brake.data = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_BRAKE_THROTTLE_MIN ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_BRAKE_THROTTLE_MIN, brake_max, 255, 0);
-      cmd.throttle.data = (uint8_t) 0;
-    }
-    else if (buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]>= throttle_min)
-    {
-      cmd.throttle.data = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_BRAKE_THROTTLE_MAX ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], throttle_min, GOKART_RF_BRAKE_THROTTLE_MAX, 0, 255);
-      cmd.brake.data = (uint8_t) 0;
-    }
     else{
-      cmd.throttle.data = (uint8_t) 0;
-      cmd.brake.data = (uint8_t) 0;
+      contador=0;
     }
 
-
-    //Emergency match
-    int medium_emergency= (GOKART_RF_EMERGENCY_MIN + GOKART_RF_EMERGENCY_MAX)/2;
-    if ( buffer_uptime2[RF_INTERFACE_BUFFER_SIZE]>medium_emergency )
-    {
+    if(contador>15){
+      apagado=true;
+    }
+    if(apagado){
       cmd.emergency.data = (uint8_t) 1;
     }
-    else
-    {
-      cmd.emergency.data = (uint8_t) 0;
+
+    else{
+      //Stwheel match
+      int medium_stwheel= round((GOKART_RF_STWHEEL_MIN + GOKART_RF_STWHEEL_MAX)/2);
+      int left_max= medium_stwheel - round(GOKART_RF_STWHEEL_DELTA/2);
+      int right_min= medium_stwheel + round(GOKART_RF_STWHEEL_DELTA/2);
+      if (buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]<= left_max)
+      {
+        cmd.stwheel.data = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_STWHEEL_MIN ? (uint8_t) -128 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_STWHEEL_MIN, left_max, -128, 0);
+      }
+      else if (buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]>= right_min)
+      {
+        cmd.stwheel.data = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 127 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], right_min, GOKART_RF_STWHEEL_MAX, 0, 127);
+      }
+      else
+      {
+        cmd.stwheel.data = (uint8_t) 0;
+      }
+
+
+      //Brake & Throttle match
+      int medium_brake_throttle= round((GOKART_RF_BRAKE_THROTTLE_MIN + GOKART_RF_BRAKE_THROTTLE_MAX)/2);
+      int brake_max= medium_brake_throttle - round(GOKART_RF_BRAKE_THROTTLE_DELTA/2);
+      int throttle_min= medium_brake_throttle + round(GOKART_RF_BRAKE_THROTTLE_DELTA/2);
+      if (buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]<= brake_max)
+      {
+        cmd.brake.data = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_BRAKE_THROTTLE_MIN ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_BRAKE_THROTTLE_MIN, brake_max, 255, 0);
+        cmd.throttle.data = (uint8_t) 0;
+      }
+      else if (buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]>= throttle_min)
+      {
+        cmd.throttle.data = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_BRAKE_THROTTLE_MAX ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], throttle_min, GOKART_RF_BRAKE_THROTTLE_MAX, 0, 255);
+        cmd.brake.data = (uint8_t) 0;
+      }
+      else{
+        cmd.throttle.data = (uint8_t) 0;
+        cmd.brake.data = (uint8_t) 0;
+      }
+
+
+      //Emergency match
+      int medium_emergency= (GOKART_RF_EMERGENCY_MIN + GOKART_RF_EMERGENCY_MAX)/2;
+      if ( buffer_uptime2[RF_INTERFACE_BUFFER_SIZE]>medium_emergency )
+      {
+        cmd.emergency.data = (uint8_t) 1;
+      }
+      else
+      {
+        cmd.emergency.data = (uint8_t) 0;
+      }
     }
   }
 }

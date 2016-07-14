@@ -115,14 +115,19 @@ namespace GoKart
       volatile uint32_t risingTimeCH1;  //Time of front raising
       volatile uint32_t fallingTimeCH1; //Time of front falling
       volatile uint32_t upTimeCH1;      //Time of pulse CH1
+      volatile uint32_t CH1antiguo;
 
       volatile uint32_t risingTimeCH2;  //Time of front raising
       volatile uint32_t fallingTimeCH2; //Time of front falling
       volatile uint32_t upTimeCH2;      //Time of pulse CH2
+      volatile uint32_t CH2antiguo;
 
       volatile uint32_t risingTimeCH3;  //Time of front raising
       volatile uint32_t fallingTimeCH3; //Time of front falling
       volatile uint32_t upTimeCH3;      //Time of pulse CH3
+      volatile uint32_t CH3antiguo;  
+
+      int contador=0;
 
       volatile uint32_t timer2OVF;      //Timer2 overflow count
 
