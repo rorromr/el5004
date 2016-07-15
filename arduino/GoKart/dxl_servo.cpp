@@ -82,6 +82,11 @@ namespace GoKart
     return dxl_->torqueStatus(id_, torque_enable);
   }
 
+  int16_t DxlServo::getLoad()
+  {
+    return dxl_->readLoad(id_);
+  }
+
 
   bool DxlServo::check()
   {

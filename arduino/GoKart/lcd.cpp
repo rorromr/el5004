@@ -9,8 +9,10 @@ namespace GoKart
     servoSelected_(0U),
     potPos_(0U),
     potCW_(0U),
-    potCCW_(0U)
-  {}
+    potCCW_(0U),
+    menuSelected_(0U)
+  {
+  }
 
   bool LCD::init()
   {
@@ -51,7 +53,7 @@ namespace GoKart
     servo->ccwLimit = 0U;
   }
 
-  void LCD::test()
+  void LCD::printTest(void *data)
   {
     ButtonState btn = getButton();
     updatePot();
@@ -92,7 +94,7 @@ namespace GoKart
     lcd_.print(millis()/1000);// Display seconds elapsed since power-up
   }
 
-  void LCD::printConfig(void *data)
+  void LCD::printMotorInfo(void *data)
   {
     if (servoCount_ == 0U) return;
 
@@ -104,13 +106,14 @@ namespace GoKart
         servoSelected_ = (servoSelected_+1U) > (servoCount_-1U) ? servoSelected_ : (servoSelected_+1U);
         break;
       case BTN_RIGHT:
-        servoSelected_ = servoSelected_ > 0 ? (servoSelected_-1U) : 0U;
+        servoSelected_ = servoSelected_ > 0U ? (servoSelected_-1U) : 0U;
         break;
     }
-
+    Serial.println(servoSelected_);
     ServoInfo* servo = &servoInfo_[servoSelected_];
     // Update values
     servo->pos = servo->servo->getPosition();
+    servo->load = servo->servo->getLoad();
     servo->cwLimit = servo->servo->getCWLimit();
     servo->ccwLimit = servo->servo->getCCWLimit();
     
@@ -120,7 +123,17 @@ namespace GoKart
     lcd_.setCursor(5, 0);
     lcd_.print("Pos:");
     lcd_.setCursor(9, 0);
+    lcd_.print("    ");
+    lcd_.setCursor(9, 0);
     lcd_.print(servo->pos);
+    // Second row: Load
+    lcd_.setCursor(0, 1);
+    lcd_.print("L:");
+    lcd_.setCursor(3, 1);
+    lcd_.print("    ");
+    lcd_.setCursor(3, 1);
+    lcd_.print(servo->load);
+    /*
     // Second row: CW and CCW limit
     lcd_.setCursor(0, 1);
     lcd_.print("CW:");
@@ -130,6 +143,7 @@ namespace GoKart
     lcd_.print("CCW:");
     lcd_.setCursor(11, 1);
     lcd_.print(servo->ccwLimit);
+    */
   }
 
   void LCD::printCommand(void *data)
@@ -138,21 +152,35 @@ namespace GoKart
     // First row: steering wheel and emergency
     lcd_.setCursor(0, 0);
     lcd_.print("SW: ");
+    lcd_.setCursor(4, 0);
+    lcd_.print("    ");
+    lcd_.setCursor(4, 0);
     lcd_.print(cmd->stwheel.data);
-    lcd_.setCursor(8, 0);
+
+    lcd_.setCursor(9, 0);
     lcd_.print("E: ");
+    lcd_.setCursor(12, 0);
+    lcd_.print("    ");
+    lcd_.setCursor(12, 0);
     lcd_.print(cmd->emergency.data);
 
     // Second row: brake and throttle
     lcd_.setCursor(0, 1);
     lcd_.print("BK: ");
+    lcd_.setCursor(4, 1);
+    lcd_.print("    ");
+    lcd_.setCursor(4, 1);
     lcd_.print(cmd->brake.data);
+    
     lcd_.setCursor(8, 1);
     lcd_.print("TH:");
+    lcd_.setCursor(12, 1);
+    lcd_.print("    ");
+    lcd_.setCursor(12, 1);
     lcd_.print(cmd->throttle.data); 
   }
 
-  void LCD::printConfigMotor(void *data)
+  void LCD::printMotorConfig(void *data)
   {
     if (servoCount_ == 0U) return;
 
@@ -167,7 +195,6 @@ namespace GoKart
         servoSelected_ = servoSelected_ > 0 ? (servoSelected_-1U) : 0U;
         break;
     }
-
     ServoInfo* servo = &servoInfo_[servoSelected_];
     // Update values
     servo->pos = servo->servo->getPosition();
@@ -188,15 +215,21 @@ namespace GoKart
     lcd_.setCursor(5, 0);
     lcd_.print("Pos:");
     lcd_.setCursor(9, 0);
+    lcd_.print("    ");
+    lcd_.setCursor(9, 0);
     lcd_.print(pos);
     // Second row: CW and CCW limit
     lcd_.setCursor(0, 1);
     lcd_.print("CW:");
     lcd_.setCursor(3, 1);
+    lcd_.print("    ");
+    lcd_.setCursor(3, 1);
     lcd_.print(cw);
     lcd_.setCursor(8, 1);
     lcd_.print("CCW:");
-    lcd_.setCursor(11, 1);
+    lcd_.setCursor(12, 1);
+    lcd_.print("    ");
+    lcd_.setCursor(12, 1);
     lcd_.print(ccw);
 
     btn = getButton();
@@ -216,6 +249,47 @@ namespace GoKart
       else lcd_.print("Done!");
       delay(500);
     }
+  }
+
+  void LCD::printMenu(void *data)
+  {
+    static uint32_t last_call = 0UL;
+    if (millis()-last_call<100) return;
+    last_call = millis();
+
+    if (servoCount_ == 0U) return;
+
+    ButtonState btn = getButton();
+
+    switch(btn)
+    {
+      case BTN_UP:
+        menuSelected_ = (menuSelected_+1U) > 2U ? 0U : (menuSelected_+1U);
+        lcd_.clear();
+        break;
+      case BTN_DOWN:
+        menuSelected_ = menuSelected_ > 0 ? (menuSelected_-1U) : 2U;
+        lcd_.clear();
+        break;
+    }
+
+    switch(menuSelected_)
+    {
+      case 0:
+        printCommand(data);
+        break;
+      case 1:
+        printMotorInfo(data);
+        break;
+      case 2:
+        printMotorConfig(data);
+        break;
+    }
+  }
+
+  void LCD::clear()
+  {
+    lcd_.clear();
   }
 
 }

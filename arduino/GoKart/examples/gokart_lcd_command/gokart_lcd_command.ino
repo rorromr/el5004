@@ -20,7 +20,19 @@ void setup()
 
 void loop()
 {
-  gokart.lcd.printTest(NULL);
-  delay(50);
-  gokart.lcd.clear();
+  // Get command from communication iface
+  gokart.updateCommand();
+  // Check emergency status
+  while(gokart.isEmergency())
+  {
+    gokart.setEmergencyState();
+    Serial.println("ON EMERGENCY!");
+    delay(100);
+    gokart.updateCommand();
+    gokart.lcd.printMenu(&gokart.cmd_);
+  }
+
+  // Set actuators
+  gokart.setCommand();
+  gokart.lcd.printMenu(&gokart.cmd_);
 }

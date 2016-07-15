@@ -41,6 +41,7 @@ namespace GoKart
     DxlServo *servo;
     char name[4];
     int16_t pos;
+    int16_t load;
     int16_t cwLimit;
     int16_t ccwLimit;
   } ServoInfo;
@@ -55,6 +56,8 @@ namespace GoKart
     BTN_SELECT = 5U
   } ButtonState;
 
+  
+
   class LCD
   {
     public:
@@ -68,13 +71,19 @@ namespace GoKart
 
       bool addServo(DxlServo *s, const char *name);
 
-      void printConfig(void *data);
+      void printMenu(void *data);
 
       void printCommand(void *data);
 
-      void printConfigMotor(void *data);
+      void printMotorInfo(void *data);
 
-      void test();
+      void printMotorConfig(void *data);
+
+      void printTest(void *data);
+
+      void clear();
+
+      typedef void (*printMenuFcn)(void *data);
 
     private:
       LiquidCrystal lcd_;
@@ -85,6 +94,8 @@ namespace GoKart
       uint16_t potPos_;
       uint16_t potCW_;
       uint16_t potCCW_;
+      uint8_t menuSelected_;
+
 
   };
 }
