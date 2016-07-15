@@ -106,6 +106,14 @@ namespace GoKart
     return result;
   }
 
+  uint32_t RFInterface::escalon(uint32_t valorAntiguo, uint32_t valorActual){
+    if (abs(valorAntiguo-valorActual)>3){
+      return valorActual;
+    }
+    else
+      return valorAntiguo;
+  }
+
   void RFInterface::update()
   {
     // @TODO Check timeouts and data consistency
@@ -172,18 +180,26 @@ namespace GoKart
       int medium_stwheel= round((GOKART_RF_STWHEEL_MIN + GOKART_RF_STWHEEL_MAX)/2);
       int left_max= medium_stwheel - round(GOKART_RF_STWHEEL_DELTA/2);
       int right_min= medium_stwheel + round(GOKART_RF_STWHEEL_DELTA/2);
+
       if (buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]<= left_max)
       {
-        cmd.stwheel.data = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_STWHEEL_MIN ? (uint8_t) -128 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_STWHEEL_MIN, left_max, -128, 0);
+       cmd.stwheel.data = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_STWHEEL_MIN ? (uint8_t) -128 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_STWHEEL_MIN, left_max, -128, 0);
+    //    stwheelActual = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_STWHEEL_MIN ? (uint8_t) -128 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_STWHEEL_MIN, left_max, -128, 0);
+    
       }
       else if (buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]>= right_min)
       {
-        cmd.stwheel.data = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 127 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], right_min, GOKART_RF_STWHEEL_MAX, 0, 127);
+       cmd.stwheel.data = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 127 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], right_min, GOKART_RF_STWHEEL_MAX, 0, 127);
+     //   stwheelActual = buffer_uptime0[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 127 : (uint8_t) map(buffer_uptime0[RF_INTERFACE_BUFFER_SIZE], right_min, GOKART_RF_STWHEEL_MAX, 0, 127);
+
       }
       else
       {
-        cmd.stwheel.data = (uint8_t) 0;
+       cmd.stwheel.data = (uint8_t) 0;
+       // stwheelActual = (uint8_t) 0; 
       }
+     // stwheelAntiguo=RFInterface::escalon(stwheelAntiguo, stwheelActual);
+      //cmd.stwheel.data=stwheelAntiguo;
 
 
       //Brake & Throttle match
@@ -192,18 +208,44 @@ namespace GoKart
       int throttle_min= medium_brake_throttle + round(GOKART_RF_BRAKE_THROTTLE_DELTA/2);
       if (buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]<= brake_max)
       {
-        cmd.brake.data = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_BRAKE_THROTTLE_MIN ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_BRAKE_THROTTLE_MIN, brake_max, 255, 0);
-        cmd.throttle.data = (uint8_t) 0;
+ //       cmd.brake.data = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_BRAKE_THROTTLE_MIN ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_BRAKE_THROTTLE_MIN, brake_max, 255, 0);
+        brakeActual = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]<GOKART_RF_BRAKE_THROTTLE_MIN ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], GOKART_RF_BRAKE_THROTTLE_MIN, brake_max, 255, 0);
+        throttleActual = (uint8_t) 0;
+        //cmd.throttle.data = (uint8_t) 0;
       }
       else if (buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]>= throttle_min)
       {
-        cmd.throttle.data = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_BRAKE_THROTTLE_MAX ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], throttle_min, GOKART_RF_BRAKE_THROTTLE_MAX, 0, 255);
-        cmd.brake.data = (uint8_t) 0;
+        //cmd.throttle.data = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_BRAKE_THROTTLE_MAX ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], throttle_min, GOKART_RF_BRAKE_THROTTLE_MAX, 0, 255);
+        //cmd.brake.data = (uint8_t) 0;
+
+        throttleActual = buffer_uptime1[RF_INTERFACE_BUFFER_SIZE]>GOKART_RF_BRAKE_THROTTLE_MAX ? (uint8_t) 255 : (uint8_t) map(buffer_uptime1[RF_INTERFACE_BUFFER_SIZE], throttle_min, GOKART_RF_BRAKE_THROTTLE_MAX, 0, 255);
+        brakeActual= (uint8_t) 0;
       }
       else{
-        cmd.throttle.data = (uint8_t) 0;
-        cmd.brake.data = (uint8_t) 0;
+        //cmd.throttle.data = (uint8_t) 0;
+       // cmd.brake.data = (uint8_t) 0;
+
+        throttleActual = (uint8_t) 0;
+        brakeActual = (uint8_t) 0;
       }
+      if (brakeActual==0){
+        brakeAntiguo=0;
+      }
+      else{
+        brakeAntiguo=RFInterface::escalon(brakeAntiguo, brakeActual);
+      }
+      if(throttleActual==0){
+        throttleAntiguo=0;
+      }
+      else{
+        throttleAntiguo=RFInterface::escalon(throttleAntiguo, throttleActual);
+      }
+      cmd.throttle.data=throttleAntiguo;
+      cmd.brake.data=brakeAntiguo;
+      Serial.println("Actual:");
+      Serial.println(throttleActual);
+      Serial.println("Antiguo:");
+      Serial.println(throttleAntiguo);      
 
 
       //Emergency match
