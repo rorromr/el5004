@@ -162,6 +162,9 @@ namespace GoKart
     {
       cmd.stwheel.data = (uint8_t) 0;
     }
+    // Set left + | right -
+    // @TODO
+    cmd.stwheel.data = cmd.stwheel.data == -128 ? 127 : -1*cmd.stwheel.data;
 
 
     //Brake & Throttle match
