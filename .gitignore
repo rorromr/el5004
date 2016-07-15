@@ -10,3 +10,6 @@
 ## Visual studio code
 .vscode*
 
+# Python
+*.pyc
+
