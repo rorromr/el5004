@@ -9,7 +9,7 @@ namespace GoKart
   {
     if (!dxl_)
     {
-      DEBUG_PRINT("E/DxlServo/config/Null interface "); DEBUG_PRINTLN(id_);
+      ERROR_PRINT_NAMED("DxlServo/config", "Null interface "); ERROR_PRINTLN_RAW(id_);
       set_error(&status_, DXL_SERVO_NULL_INTERFACE);
     }
   }
@@ -22,7 +22,7 @@ namespace GoKart
 
     if (!dxl_)
     {
-      DEBUG_PRINT("E/DxlServo/config/Null interface "); DEBUG_PRINTLN(id_);
+      ERROR_PRINT_NAMED("DxlServo/config", "Null interface "); ERROR_PRINTLN_RAW(id_);
       set_error(&status_, DXL_SERVO_NULL_INTERFACE);
       return false;
     }
@@ -33,7 +33,7 @@ namespace GoKart
     error = dxl_->setCCWLimit(id_, max_);
     if (error)
     {
-      DEBUG_PRINT("E/DxlServo/config/Servo fail config "); DEBUG_PRINTLN(id_);
+      ERROR_PRINT_NAMED("DxlServo/config", "Servo fail config "); ERROR_PRINTLN_RAW(id_);
       set_error(&status_, DXL_SERVO_ERROR_CONFIG);
       return false;
     }
@@ -90,19 +90,19 @@ namespace GoKart
 
   bool DxlServo::check()
   {
-    DEBUG_PRINTLN("D/DxlServo/check/");
+    DEBUG_PRINTLN_NAMED("dxl_servo/check","check");
     // Ping check
     uint8_t ping_attempts = 0U;
     uint8_t ping_status = 0U;
     while(!ping_status && ping_attempts < DXL_SERVO_PING_ATTEMPTS)
     {
-      DEBUG_PRINT("D/DxlServo/check/New ping attempt with servo "); DEBUG_PRINTLN(id_);
+      DEBUG_PRINT_NAMED("dxl_servo/check","ping attempt with servo "); DEBUG_PRINTLN_RAW(id_);
       ping_status = dxl_->ping(id_) == -1 ? 0U : 1U;
       ++ping_attempts;
     }
     if (!ping_status)
     {
-      DEBUG_PRINT("E/DxlServo/check/Servo not found "); DEBUG_PRINTLN(id_);
+      ERROR_PRINT_NAMED("dxl_servo/check", "Servo not found "); ERROR_PRINTLN_RAW(id_);
       set_error(&status_, DXL_SERVO_NOT_FOUND);
       return false;
     }
@@ -110,13 +110,13 @@ namespace GoKart
     uint16_t pos = dxl_->readPosition(id_);
     if (pos > max_)
     {
-      DEBUG_PRINT("E/DxlServo/check/Servo max angle CW "); DEBUG_PRINTLN(id_);
+      ERROR_PRINT_NAMED("dxl_servo/check","Servo max angle CCW "); ERROR_PRINTLN_RAW(id_);
       set_error(&status_, DXL_SERVO_MAX_ANGLE_CW);
       return false;
     }
     else if (pos < min_)
     {
-      DEBUG_PRINT("E/DxlServo/check/Servo max angle CCW "); DEBUG_PRINTLN(id_);
+      ERROR_PRINT_NAMED("dxl_servo/check","Servo max angle CW "); ERROR_PRINTLN_RAW(id_);
       set_error(&status_, DXL_SERVO_MAX_ANGLE_CCW);
       return false;
     }

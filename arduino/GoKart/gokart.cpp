@@ -18,31 +18,31 @@ namespace GoKart
     bool result = false;
     // Init brake
     result = brake.init();
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Brake bad initialization");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Brake bad initialization");
 
     // Init steering wheel
     result = sw.init();
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/SteeringWheel bad initialization");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "SteeringWheel bad initialization");
     
     // Init throttle
     result = thr.init();
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Throttle bad initialization");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Throttle bad initialization");
 
     // Init communication
     result = com_->init();
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Communication bad initialization");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Communication bad initialization");
 
     // Init LCD
     lcd.init();
     // Add servos
     result = lcd.addServo(&brake, "BR");
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Fail to add brake servo to LCD");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Fail to add brake servo to LCD");
     result = lcd.addServo(&thr, "TH");
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Fail to add throttle servo to LCD");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Fail to add throttle servo to LCD");
     result = lcd.addServo(&sw, "SW");
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Fail to add stwheel servo to LCD");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Fail to add stwheel servo to LCD");
     // @TODO Hardcoded return
-    DEBUG_PRINTLN("I/GoKart/init/GoKart init [OK]");
+    DEBUG_PRINTLN_NAMED("GoKart/init", "GoKart init exit");
     return true;
   }
 
