@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.4.0">
+<eagle version="7.6.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -145,6 +145,8 @@
 <layer number="229" name="229bmp" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="230" name="230bmp" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="231" name="231bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="232" name="Eagle3D_PG2" color="7" fill="1" visible="no" active="no"/>
+<layer number="233" name="Eagle3D_PG3" color="7" fill="1" visible="no" active="no"/>
 <layer number="248" name="Housing" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="249" name="Edge" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="250" name="Descript" color="3" fill="1" visible="no" active="no"/>
@@ -3362,6 +3364,67 @@ It has a reduced top mask to make it harder to install upside-down.</description
 <circle x="-3.81" y="0" radius="1.02390625" width="0" layer="30"/>
 <circle x="3.81" y="0" radius="1.04726875" width="0" layer="30"/>
 </package>
+<package name="LCD_SHIELD">
+<wire x1="0" y1="0" x2="80.01" y2="0" width="0.127" layer="51"/>
+<wire x1="80.01" y1="0" x2="80.01" y2="5.08" width="0.127" layer="51"/>
+<wire x1="80.01" y1="5.08" x2="82.55" y2="7.62" width="0.127" layer="51"/>
+<pad name="D4" x="67.31" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="BS" x="64.77" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@5" x="69.85" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@6" x="72.39" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@7" x="74.93" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@8" x="77.47" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="D5" x="64.77" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="D6" x="62.23" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="D7" x="59.69" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="RS" x="55.626" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="EN" x="53.086" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="BLC" x="50.546" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@4" x="48.006" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@3" x="45.466" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@2" x="42.926" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="GND@3" x="40.386" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@1" x="37.846" y="53.34" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@12" x="67.31" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@13" x="69.85" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@14" x="72.39" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@15" x="74.93" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@16" x="77.47" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@11" x="59.69" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="GND@1" x="57.15" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="GND@2" x="54.61" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="5V" x="52.07" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@10" x="49.53" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<pad name="NC@9" x="46.99" y="5.08" drill="1" diameter="1.6764" shape="long" rot="R90"/>
+<text x="51.5163" y="6.985" size="1.016" layer="21" font="vector">5v</text>
+<text x="54.7471" y="6.985" size="1.016" layer="21" font="vector">Gnd</text>
+<text x="63.754" y="6.985" size="1.016" layer="21" font="vector">BS</text>
+<text x="41.91" y="51.435" size="1.016" layer="21" font="vector" rot="R180">GND</text>
+<text x="51.689" y="51.435" size="1.016" layer="21" font="vector" rot="R180">BLC</text>
+<text x="53.721" y="51.435" size="1.016" layer="21" font="vector" rot="R180">EN</text>
+<text x="56.261" y="51.435" size="1.016" layer="21" font="vector" rot="R180">RS</text>
+<text x="60.325" y="51.435" size="1.016" layer="21" font="vector" rot="R180">7</text>
+<text x="62.865" y="51.435" size="1.016" layer="21" font="vector" rot="R180">6</text>
+<text x="65.405" y="51.435" size="1.016" layer="21" font="vector" rot="R180">5</text>
+<text x="67.945" y="51.435" size="1.016" layer="21" font="vector" rot="R180">4</text>
+<circle x="80.01" y="10.16" radius="1.651" width="0.127" layer="51"/>
+<wire x1="76.2" y1="58.42" x2="0" y2="58.42" width="0.127" layer="51"/>
+<wire x1="0" y1="58.42" x2="0" y2="0" width="0.127" layer="51"/>
+<wire x1="76.2" y1="58.42" x2="82.55" y2="52.07" width="0.127" layer="51"/>
+<wire x1="82.55" y1="52.07" x2="82.55" y2="7.62" width="0.127" layer="51"/>
+<circle x="80.01" y="19.05" radius="1.651" width="0.127" layer="21"/>
+<circle x="2.54" y="19.05" radius="1.651" width="0.127" layer="51"/>
+<circle x="2.54" y="50.292" radius="1.651" width="0.127" layer="51"/>
+<circle x="80.01" y="50.292" radius="1.651" width="0.127" layer="51"/>
+<wire x1="5.08" y1="46.99" x2="77.47" y2="46.99" width="0.127" layer="51"/>
+<wire x1="77.47" y1="46.99" x2="77.47" y2="21.59" width="0.127" layer="51"/>
+<wire x1="77.47" y1="21.59" x2="5.08" y2="21.59" width="0.127" layer="51"/>
+<wire x1="5.08" y1="21.59" x2="5.08" y2="46.99" width="0.127" layer="51"/>
+<wire x1="76.2" y1="45.72" x2="6.35" y2="45.72" width="0.127" layer="51"/>
+<wire x1="6.35" y1="45.72" x2="6.35" y2="22.86" width="0.127" layer="51"/>
+<wire x1="6.35" y1="22.86" x2="76.2" y2="22.86" width="0.127" layer="51"/>
+<wire x1="76.2" y1="22.86" x2="76.2" y2="45.72" width="0.127" layer="51"/>
+</package>
 </packages>
 <symbols>
 <symbol name="M08">
@@ -3598,6 +3661,23 @@ Digikey code: WM18888-ND</description>
 <text x="-3.81" y="-3.302" size="1.778" layer="96">&gt;VALUE</text>
 <pin name="2" x="5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1" rot="R180"/>
 <pin name="1" x="-5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1"/>
+</symbol>
+<symbol name="LCD_SHIELD">
+<wire x1="7.62" y1="-17.78" x2="-5.08" y2="-17.78" width="0.4064" layer="94"/>
+<wire x1="-5.08" y1="15.24" x2="-5.08" y2="-17.78" width="0.4064" layer="94"/>
+<wire x1="7.62" y1="-17.78" x2="7.62" y2="15.24" width="0.4064" layer="94"/>
+<wire x1="-5.08" y1="15.24" x2="7.62" y2="15.24" width="0.4064" layer="94"/>
+<text x="-5.08" y="16.002" size="1.778" layer="95">&gt;NAME</text>
+<pin name="VCC" x="12.7" y="12.7" length="middle" direction="pwr" rot="R180"/>
+<pin name="GND" x="12.7" y="10.16" length="middle" direction="pwr" rot="R180"/>
+<pin name="DB4" x="12.7" y="5.08" length="middle" rot="R180"/>
+<pin name="DB5" x="12.7" y="2.54" length="middle" rot="R180"/>
+<pin name="DB6" x="12.7" y="0" length="middle" rot="R180"/>
+<pin name="DB7" x="12.7" y="-2.54" length="middle" rot="R180"/>
+<pin name="EN" x="12.7" y="-7.62" length="middle" rot="R180"/>
+<pin name="RS" x="12.7" y="-10.16" length="middle" rot="R180"/>
+<pin name="BLC" x="12.7" y="-12.7" length="middle" rot="R180"/>
+<pin name="BS" x="12.7" y="-15.24" length="middle" direction="out" rot="R180"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -5173,6 +5253,31 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 </device>
 </devices>
 </deviceset>
+<deviceset name="LCD_SHIELD">
+<description>LCD Shield</description>
+<gates>
+<gate name="G$1" symbol="LCD_SHIELD" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="LCD_SHIELD">
+<connects>
+<connect gate="G$1" pin="BLC" pad="BLC"/>
+<connect gate="G$1" pin="BS" pad="BS"/>
+<connect gate="G$1" pin="DB4" pad="D4"/>
+<connect gate="G$1" pin="DB5" pad="D5"/>
+<connect gate="G$1" pin="DB6" pad="D6"/>
+<connect gate="G$1" pin="DB7" pad="D7"/>
+<connect gate="G$1" pin="EN" pad="EN"/>
+<connect gate="G$1" pin="GND" pad="GND@1 GND@2 GND@3"/>
+<connect gate="G$1" pin="RS" pad="RS"/>
+<connect gate="G$1" pin="VCC" pad="5V"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
 </devicesets>
 </library>
 </libraries>
@@ -5210,8 +5315,7 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <part name="R1" library="mecatronica_eagle_lib" deviceset="RESISTOR" device="PTH-1/4W" value="10k"/>
 <part name="R2" library="mecatronica_eagle_lib" deviceset="RESISTOR" device="PTH-1/4W" value="10k"/>
 <part name="GND5" library="SparkFun" deviceset="GND" device=""/>
-<part name="J15" library="mecatronica_eagle_lib" deviceset="M08" device="LONGPADS"/>
-<part name="J16" library="mecatronica_eagle_lib" deviceset="M03" device="LONGPADS"/>
+<part name="LCD" library="mecatronica_eagle_lib" deviceset="LCD_SHIELD" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -5244,8 +5348,7 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <instance part="R1" gate="G$1" x="20.32" y="165.1" rot="R90"/>
 <instance part="R2" gate="G$1" x="30.48" y="165.1" rot="R90"/>
 <instance part="GND5" gate="1" x="104.14" y="134.62"/>
-<instance part="J15" gate="G$1" x="160.02" y="154.94" rot="MR90"/>
-<instance part="J16" gate="J$1" x="185.42" y="152.4" rot="R90"/>
+<instance part="LCD" gate="G$1" x="154.94" y="157.48"/>
 </instances>
 <busses>
 </busses>
@@ -5255,11 +5358,6 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <wire x1="83.82" y1="58.42" x2="83.82" y2="60.96" width="0.1524" layer="91"/>
 <label x="83.82" y="57.15" size="1.778" layer="95" rot="R90"/>
 <pinref part="J10" gate="G$1" pin="1"/>
-</segment>
-<segment>
-<pinref part="J16" gate="J$1" pin="3"/>
-<wire x1="182.88" y1="160.02" x2="182.88" y2="165.1" width="0.1524" layer="91"/>
-<label x="182.88" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
 </segment>
 </net>
 <net name="3.3" class="0">
@@ -5439,9 +5537,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="J8" gate="G$1" pin="8"/>
 </segment>
 <segment>
-<pinref part="J15" gate="G$1" pin="8"/>
-<wire x1="170.18" y1="160.02" x2="170.18" y2="165.1" width="0.1524" layer="91"/>
-<label x="170.18" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
+<wire x1="167.64" y1="142.24" x2="175.26" y2="142.24" width="0.1524" layer="91"/>
+<label x="175.26" y="142.24" size="1.27" layer="95" xref="yes"/>
+<pinref part="LCD" gate="G$1" pin="BS"/>
 </segment>
 </net>
 <net name="TX1" class="0">
@@ -5608,9 +5706,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="J5" gate="G$1" pin="5"/>
 </segment>
 <segment>
-<pinref part="J15" gate="G$1" pin="1"/>
-<wire x1="152.4" y1="160.02" x2="152.4" y2="165.1" width="0.1524" layer="91"/>
-<label x="152.4" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
+<wire x1="167.64" y1="162.56" x2="175.26" y2="162.56" width="0.1524" layer="91"/>
+<label x="175.26" y="162.56" size="1.27" layer="95" xref="yes"/>
+<pinref part="LCD" gate="G$1" pin="DB4"/>
 </segment>
 </net>
 <net name="D32" class="0">
@@ -5620,9 +5718,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="J5" gate="G$1" pin="6"/>
 </segment>
 <segment>
-<pinref part="J15" gate="G$1" pin="3"/>
-<wire x1="157.48" y1="160.02" x2="157.48" y2="165.1" width="0.1524" layer="91"/>
-<label x="157.48" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
+<wire x1="167.64" y1="157.48" x2="175.26" y2="157.48" width="0.1524" layer="91"/>
+<label x="175.26" y="157.48" size="1.27" layer="95" xref="yes"/>
+<pinref part="LCD" gate="G$1" pin="DB6"/>
 </segment>
 </net>
 <net name="D34" class="0">
@@ -5632,9 +5730,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="J5" gate="G$1" pin="7"/>
 </segment>
 <segment>
-<pinref part="J15" gate="G$1" pin="5"/>
-<wire x1="162.56" y1="160.02" x2="162.56" y2="165.1" width="0.1524" layer="91"/>
-<label x="162.56" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
+<wire x1="167.64" y1="147.32" x2="175.26" y2="147.32" width="0.1524" layer="91"/>
+<label x="175.26" y="147.32" size="1.27" layer="95" xref="yes"/>
+<pinref part="LCD" gate="G$1" pin="RS"/>
 </segment>
 </net>
 <net name="D36" class="0">
@@ -5644,9 +5742,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="J5" gate="G$1" pin="8"/>
 </segment>
 <segment>
-<pinref part="J15" gate="G$1" pin="7"/>
-<wire x1="167.64" y1="160.02" x2="167.64" y2="165.1" width="0.1524" layer="91"/>
-<label x="167.64" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
+<wire x1="167.64" y1="144.78" x2="175.26" y2="144.78" width="0.1524" layer="91"/>
+<label x="175.26" y="144.78" size="1.27" layer="95" xref="yes"/>
+<pinref part="LCD" gate="G$1" pin="BLC"/>
 </segment>
 </net>
 <net name="D38" class="0">
@@ -5733,9 +5831,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="J4" gate="G$1" pin="12"/>
 </segment>
 <segment>
-<pinref part="J15" gate="G$1" pin="2"/>
-<wire x1="154.94" y1="160.02" x2="154.94" y2="165.1" width="0.1524" layer="91"/>
-<label x="154.94" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
+<wire x1="167.64" y1="160.02" x2="175.26" y2="160.02" width="0.1524" layer="91"/>
+<label x="175.26" y="160.02" size="1.27" layer="95" xref="yes"/>
+<pinref part="LCD" gate="G$1" pin="DB5"/>
 </segment>
 </net>
 <net name="D33" class="0">
@@ -5745,9 +5843,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="J4" gate="G$1" pin="11"/>
 </segment>
 <segment>
-<pinref part="J15" gate="G$1" pin="4"/>
-<wire x1="160.02" y1="160.02" x2="160.02" y2="165.1" width="0.1524" layer="91"/>
-<label x="160.02" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
+<wire x1="167.64" y1="154.94" x2="175.26" y2="154.94" width="0.1524" layer="91"/>
+<label x="175.26" y="154.94" size="1.27" layer="95" xref="yes"/>
+<pinref part="LCD" gate="G$1" pin="DB7"/>
 </segment>
 </net>
 <net name="D35" class="0">
@@ -5757,9 +5855,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="J4" gate="G$1" pin="10"/>
 </segment>
 <segment>
-<pinref part="J15" gate="G$1" pin="6"/>
-<wire x1="165.1" y1="160.02" x2="165.1" y2="165.1" width="0.1524" layer="91"/>
-<label x="165.1" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
+<wire x1="167.64" y1="149.86" x2="175.26" y2="149.86" width="0.1524" layer="91"/>
+<label x="175.26" y="149.86" size="1.27" layer="95" xref="yes"/>
+<pinref part="LCD" gate="G$1" pin="EN"/>
 </segment>
 </net>
 <net name="D37" class="0">
@@ -5895,9 +5993,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="J1" gate="G$1" pin="2"/>
 </segment>
 <segment>
-<pinref part="J16" gate="J$1" pin="1"/>
-<wire x1="187.96" y1="160.02" x2="187.96" y2="165.1" width="0.1524" layer="91"/>
-<label x="187.96" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
+<wire x1="167.64" y1="167.64" x2="175.26" y2="167.64" width="0.1524" layer="91"/>
+<label x="175.26" y="167.64" size="1.27" layer="95" xref="yes"/>
+<pinref part="LCD" gate="G$1" pin="GND"/>
 </segment>
 </net>
 <net name="N$4" class="0">
@@ -6019,9 +6117,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <junction x="213.36" y="144.78"/>
 </segment>
 <segment>
-<pinref part="J16" gate="J$1" pin="2"/>
-<wire x1="185.42" y1="160.02" x2="185.42" y2="165.1" width="0.1524" layer="91"/>
-<label x="185.42" y="165.1" size="1.27" layer="95" rot="R90" xref="yes"/>
+<wire x1="167.64" y1="170.18" x2="175.26" y2="170.18" width="0.1524" layer="91"/>
+<label x="175.26" y="170.18" size="1.27" layer="95" xref="yes"/>
+<pinref part="LCD" gate="G$1" pin="VCC"/>
 </segment>
 </net>
 </nets>
