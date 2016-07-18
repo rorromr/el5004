@@ -3,6 +3,56 @@
 
 namespace GoKart
 {
+  // Keypad
+  Keypad::Keypad(uint8_t buttonPin):
+    pin_(buttonPin),
+    lastState_(BTN_NONE)
+  {
+  }
+
+  ButtonState Keypad::getPressedButton()
+  {
+    // Read the value from the sensor
+    uint16_t adc_val = analogRead(pin_);
+
+    if (adc_val > 1000U) return BTN_NONE;
+    if (adc_val < 50U)   return BTN_RIGHT;  
+    if (adc_val < 250U)  return BTN_UP; 
+    if (adc_val < 450U)  return BTN_DOWN; 
+    if (adc_val < 650U)  return BTN_LEFT; 
+    else return BTN_SELECT; //(adc_val < 850U)
+  }
+
+
+  bool Keypad::raising(const ButtonState btn)
+  {
+    uint8_t state = getPressedButton()==btn ? 1U : 0U;
+    // Check raising
+    uint8_t result = state && (~((lastState_ >> btn)&1));
+    // Set bit
+    lastState_ = (lastState_ & (~(1 << btn))) | (state << btn);
+    return (bool)result;
+  }
+
+  bool Keypad::falling(const ButtonState btn)
+  {
+    uint8_t state = getPressedButton()==btn ? 0U : 1U;
+    // Check falling
+    uint8_t result = state && ((lastState_ >> btn)&1);
+    // Set bit
+    lastState_ = (lastState_ & (~(1 << btn))) | (state << btn);
+    return (bool)result;
+  }
+
+  bool Keypad::pressed(const ButtonState btn)
+  {
+    uint8_t state = getPressedButton()==btn ? 1U : 0U;
+    // Set bit
+    lastState_ = (lastState_ & (~(1 << btn))) | (state << btn);
+    return (bool)state;
+  }
+
+
   LCD::LCD():
     lcd_(GOKART_LCD_RS, GOKART_LCD_EN, GOKART_LCD_DB4, GOKART_LCD_DB5, GOKART_LCD_DB6, GOKART_LCD_DB7),
     servoCount_(0U),
@@ -10,7 +60,8 @@ namespace GoKart
     potPos_(0U),
     potCW_(0U),
     potCCW_(0U),
-    menuSelected_(0U)
+    menuSelected_(0U),
+    keypad(GOKART_LCD_BUTTON_PIN)
   {
   }
 
@@ -55,7 +106,7 @@ namespace GoKart
 
   void LCD::printTest(void *data)
   {
-    ButtonState btn = getButton();
+    ButtonState btn = keypad.getPressedButton();
     updatePot();
     char btn_name[7] = "NONE  ";
     switch(btn)

@@ -55,8 +55,24 @@ namespace GoKart
     BTN_DOWN   = 4U,
     BTN_SELECT = 5U
   } ButtonState;
+   
+  class Keypad
+  {
+    public:
+      Keypad(uint8_t buttonPin);
 
-  
+      ButtonState getPressedButton();
+
+      bool raising(const ButtonState btn);
+
+      bool falling(const ButtonState btn);
+
+      bool pressed(const ButtonState btn);
+    
+    private:
+      uint8_t pin_;
+      uint8_t lastState_;
+  };
 
   class LCD
   {
@@ -90,6 +106,8 @@ namespace GoKart
       uint8_t servoCount_;
       uint8_t servoSelected_;
       ServoInfo servoInfo_[GO_KART_LCD_MAX_SERVO];
+      // Keypad
+      Keypad keypad;
       // Potenciometer value
       uint16_t potPos_;
       uint16_t potCW_;
