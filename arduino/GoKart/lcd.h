@@ -48,12 +48,12 @@ namespace GoKart
 
   typedef enum
   {
-    BTN_NONE   = 0U,
-    BTN_UP     = 1U,
-    BTN_LEFT   = 2U,
-    BTN_RIGHT  = 3U,
-    BTN_DOWN   = 4U,
-    BTN_SELECT = 5U
+    BTN_NONE   = 1U << 0U,
+    BTN_UP     = 1U << 1U,
+    BTN_LEFT   = 1U << 2U,
+    BTN_RIGHT  = 1U << 3U,
+    BTN_DOWN   = 1U << 4U,
+    BTN_SELECT = 1U << 5U
   } ButtonState;
 
   typedef struct ButtonBit_
@@ -79,15 +79,39 @@ namespace GoKart
     public:
       Keypad(uint8_t buttonPin);
 
-      ButtonState getPressedButton();
-
       void update();
 
-      bool raising(const ButtonState btn);
+      ButtonState getPressedButton();
 
-      bool falling(const ButtonState btn);
+      inline ButtonStateUnion getPressed()
+      {
+        return current_;
+      }
 
-      bool pressed(const ButtonState btn);
+      inline ButtonStateUnion getRising()
+      {
+        return rising_;
+      }
+
+      inline ButtonStateUnion getFalling()
+      {
+        return falling_;
+      }
+
+      inline bool pressed(const ButtonState btn)
+      {
+        return rising_.value == btn;
+      }
+
+      inline bool rising(const ButtonState btn)
+      {
+        return rising_.value == btn;
+      }
+
+      inline bool falling(const ButtonState btn)
+      {
+        return falling_.value == btn;
+      }
     
     private:
       uint8_t pin_;
