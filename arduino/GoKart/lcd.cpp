@@ -5,9 +5,11 @@ namespace GoKart
 {
   // Keypad
   Keypad::Keypad(uint8_t buttonPin):
-    pin_(buttonPin),
-    lastState_(BTN_NONE)
+    pin_(buttonPin)
   {
+    current_.value = BTN_NONE;
+    rising_.value = 0U;
+    falling_.value = 0U;
   }
 
   ButtonState Keypad::getPressedButton()
@@ -23,33 +25,28 @@ namespace GoKart
     else return BTN_SELECT; //(adc_val < 850U)
   }
 
+  void Keypad::update()
+  {
+    ButtonStateUnion last = current_;
+    current_.value = 1U << getPressedButton();
+    rising_.value = (~last.value) & current_.value;
+    falling_.value = last.value & (~current_.value);
+  }
+
 
   bool Keypad::raising(const ButtonState btn)
   {
-    uint8_t state = getPressedButton()==btn ? 1U : 0U;
-    // Check raising
-    uint8_t result = state && (~((lastState_ >> btn)&1));
-    // Set bit
-    lastState_ = (lastState_ & (~(1 << btn))) | (state << btn);
-    return (bool)result;
+    return (rising_.value >> btn) & 1U;
   }
 
   bool Keypad::falling(const ButtonState btn)
   {
-    uint8_t state = getPressedButton()==btn ? 0U : 1U;
-    // Check falling
-    uint8_t result = state && ((lastState_ >> btn)&1);
-    // Set bit
-    lastState_ = (lastState_ & (~(1 << btn))) | (state << btn);
-    return (bool)result;
+    return (falling_.value >> btn) & 1U;
   }
 
   bool Keypad::pressed(const ButtonState btn)
   {
-    uint8_t state = getPressedButton()==btn ? 1U : 0U;
-    // Set bit
-    lastState_ = (lastState_ & (~(1 << btn))) | (state << btn);
-    return (bool)state;
+    return (rising_.value >> btn) & 1U;
   }
 
 
@@ -143,6 +140,21 @@ namespace GoKart
     lcd_.print(btn_name);
     lcd_.setCursor(8,1);      // Move cursor to second line "1" and 9 spaces over
     lcd_.print(millis()/1000);// Display seconds elapsed since power-up
+
+    // Test raising
+    keypad.update();
+    if (keypad.raising(BTN_UP)) Serial.println("Raising UP");
+    if (keypad.raising(BTN_DOWN)) Serial.println("Raising DOWN");
+    if (keypad.raising(BTN_LEFT)) Serial.println("Raising LEFT");
+    if (keypad.raising(BTN_RIGHT)) Serial.println("Raising RIGHT");
+    if (keypad.raising(BTN_SELECT)) Serial.println("Raising SELECT");
+
+    // Test raising
+    if (keypad.falling(BTN_UP)) Serial.println("falling UP");
+    if (keypad.falling(BTN_DOWN)) Serial.println("falling DOWN");
+    if (keypad.falling(BTN_LEFT)) Serial.println("falling LEFT");
+    if (keypad.falling(BTN_RIGHT)) Serial.println("falling RIGHT");
+    if (keypad.falling(BTN_SELECT)) Serial.println("falling SELECT");
   }
 
   void LCD::printMotorInfo(void *data)

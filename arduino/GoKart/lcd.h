@@ -55,13 +55,33 @@ namespace GoKart
     BTN_DOWN   = 4U,
     BTN_SELECT = 5U
   } ButtonState;
-   
+
+  typedef struct ButtonBit_
+  {
+    uint8_t BIT_NONE  : 1;
+    uint8_t BIT_UP    : 1;
+    uint8_t BIT_LEFT  : 1;
+    uint8_t BIT_RIGHT : 1;
+    uint8_t BIT_DOWN  : 1;
+    uint8_t BIT_SELECT: 1;
+    uint8_t BIT_B6 : 1;
+    uint8_t BIT_B7 : 1;
+  } ButtonBit;
+
+  typedef union ButtonStateUnion_
+  {
+  	uint8_t value;
+    ButtonBit button;
+  } ButtonStateUnion;
+    
   class Keypad
   {
     public:
       Keypad(uint8_t buttonPin);
 
       ButtonState getPressedButton();
+
+      void update();
 
       bool raising(const ButtonState btn);
 
@@ -71,7 +91,9 @@ namespace GoKart
     
     private:
       uint8_t pin_;
-      uint8_t lastState_;
+      ButtonStateUnion current_;
+      ButtonStateUnion rising_;
+      ButtonStateUnion falling_;
   };
 
   class LCD
