@@ -159,9 +159,24 @@ namespace GoKart
       uint16_t potCW_;
       uint16_t potCCW_;
       uint8_t menuSelected_;
-
-
   };
+
+  class LCDMenu
+  {
+    public:
+      LCDMenu(LiquidCrystal &lcd):
+        lcd_(&lcd)
+      {
+      }
+
+      virtual void printStatic() = 0;
+
+      virtual void print() = 0;
+
+    private:
+      LiquidCrystal *lcd_;
+  };
+
 }
 
 #endif
