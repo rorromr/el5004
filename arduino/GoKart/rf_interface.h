@@ -24,8 +24,8 @@
 #define GOKART_RF_CH3_PIN 20
 #define RF_INTERFACE_MAX_CH 8
 
-#define RF_INTERFACE_BUFFER_SIZE 10
-#define RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT 0.2
+//#define RF_INTERFACE_BUFFER_SIZE 10
+#define RF_INTERFACE_FIR_NEW_VALUE_WEIGHT 0.2
 
 #define RF_INTERFACE_ERROR_COUNTER_MAX 10
 
@@ -87,7 +87,7 @@ namespace GoKart
       * @param buffer Buffer pointer.
       * @return mean of the buffer.
       */
-      uint32_t meanBuffer(uint32_t *buffer);
+      //uint32_t meanBuffer(uint32_t *buffer);
 
       static RFInterface* _activeRF;
 
@@ -144,12 +144,12 @@ namespace GoKart
       uint32_t uptime_[RF_INTERFACE_MAX_CH];
 
       // Buffer filter for every channel-command
-      uint32_t buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE+1];
-      uint32_t buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE+1];
-      uint32_t buffer_uptimeCH3[RF_INTERFACE_BUFFER_SIZE+1];
+      //uint32_t buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE+1];
+      //uint32_t buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE+1];
+      //uint32_t buffer_uptimeCH3[RF_INTERFACE_BUFFER_SIZE+1];
 
       //Counter buffer
-      uint8_t counter_buffer;
+      //uint8_t counter_buffer;
 
       bool enableFilter_;
   };

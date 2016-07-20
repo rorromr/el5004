@@ -29,7 +29,7 @@ void loop()
 
   // Serial.print("overrun: "); Serial.println(rf.overrun);
 
-  // Serial.print("error counter: "); Serial.println(rf.counter_error);
+   Serial.print("error counter: "); Serial.println(rf.counter_error);
   // Serial.print("funcion update Consistency: "); Serial.println(rf.updateConsistencyError( rf.getChannel(0),  rf.getChannel(1),  rf.getChannel(2) ));
   
   delay(50);
