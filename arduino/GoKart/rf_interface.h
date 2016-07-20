@@ -52,7 +52,7 @@ namespace GoKart
       * @brief Update all channels.
       * Usually you call this method in your control loop.
       */
-      void update();
+      bool update();
 
       /**
       * @brief Get last channel uptime.

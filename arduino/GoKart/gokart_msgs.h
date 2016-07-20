@@ -47,6 +47,7 @@ namespace DataSerialization
       UInt8 brake;
       UInt8 throttle;
       UInt8 emergency;
+      UInt32 stamp;
 
       virtual uint8_t serialize(uint8_t *outbuffer) const
       {
@@ -55,6 +56,7 @@ namespace DataSerialization
         offset += this->brake.serialize(outbuffer + offset);
         offset += this->throttle.serialize(outbuffer + offset);
         offset += this->emergency.serialize(outbuffer + offset);
+        offset += this->stamp.serialize(outbuffer + offset);
         return offset;
       }
 
@@ -65,6 +67,7 @@ namespace DataSerialization
         offset += this->brake.deserialize(inbuffer + offset);
         offset += this->throttle.deserialize(inbuffer + offset);
         offset += this->emergency.deserialize(inbuffer + offset);
+        offset += this->stamp.deserialize(inbuffer + offset);
         return offset;
       } 
   };

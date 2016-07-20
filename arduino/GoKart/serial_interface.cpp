@@ -17,12 +17,13 @@ namespace GoKart
     currentCmd_.emergency.data = 0U;
   }
 
-  void SerialInterface::update()
+  bool SerialInterface::update()
   {
     while (serial_->available())
     {
       process(serial_->read());
     }
+    return true;
   }
 
   void SerialInterface::process(uint8_t data)

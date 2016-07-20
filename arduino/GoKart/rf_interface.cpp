@@ -147,13 +147,13 @@ namespace GoKart
   }
 
 
-  void RFInterface::update()
+  bool RFInterface::update()
   {
     cli();
     overrun = (channelFlag != 7U);
     sei();
 
-    if (overrun) return;
+    if (overrun) return false;
 
     cli();
     channelFlag = 0U;
@@ -167,7 +167,7 @@ namespace GoKart
 
     // Si los datos no son consistentes, entonces no actualizo el buffer de datos
     if (!current_consistency){
-      return;
+      return false;
     }
 
     uptime_[0] = upTimeCH1; //pulseIn(GOKART_RF_CH1_PIN, HIGH, 21000);
@@ -199,13 +199,18 @@ namespace GoKart
 
     //ACtualizar contador
     counter_buffer++;
+    return true;
 
   }
 
 
   void RFInterface::getCommand(DataSerialization::GoKartCommand& cmd)
   {
-    update(); //Updatea canales del transmisor
+    //Updatea canales del transmisor
+    if (!update()) return;
+
+    // Update time stamp
+    cmd.stamp.data = millis();
 
     //Si se cumple la condicion de inconsistencia de datos, entonces seteo estado de emergencia.
     if (!RFInterface::isConsistency()){
