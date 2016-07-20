@@ -47,11 +47,10 @@ namespace GoKart
   bool RFInterface::init()
   {
     // @TODO Verify status! data received?
-    while (true){
-      if (RFInterface::isConsistency()){
-        return true;
-      }
+    if (RFInterface::isConsistency()){
+      return true;
     }
+    return false;
   }
 
   void RFInterface::measureCH1()
@@ -199,19 +198,16 @@ namespace GoKart
 
     if (uptime_[0]<= left_max)
     {
-      cmd.stwheel.data = uptime_[0]<GOKART_RF_STWHEEL_MIN ? (uint8_t) -128 : (uint8_t) map(uptime_[0], GOKART_RF_STWHEEL_MIN, left_max, -128, 0);
+      cmd.stwheel.data = uptime_[0]<GOKART_RF_STWHEEL_MIN ? (uint8_t) 127 : (uint8_t) map(uptime_[0], GOKART_RF_STWHEEL_MIN, left_max, 127, 0);
     }
     else if (uptime_[0]>= right_min)
     {
-      cmd.stwheel.data = uptime_[0]>GOKART_RF_STWHEEL_MAX ? (uint8_t) 127 : (uint8_t) map(uptime_[0], right_min, GOKART_RF_STWHEEL_MAX, 0, 127);
+      cmd.stwheel.data = uptime_[0]>GOKART_RF_STWHEEL_MAX ? (uint8_t) -128 : (uint8_t) map(uptime_[0], right_min, GOKART_RF_STWHEEL_MAX, 0, -128);
     }
     else
     {
       cmd.stwheel.data = (uint8_t) 0;
     }
-    // Set left + | right -
-    // @TODO
-    cmd.stwheel.data = cmd.stwheel.data == -128 ? 127 : -1*cmd.stwheel.data;
 
     cmd.stwheel.data= RFInterface::escalon(old_stwheel, cmd.stwheel.data);
 
