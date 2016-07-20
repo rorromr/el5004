@@ -29,6 +29,8 @@
 
 #define RF_INTERFACE_ERROR_COUNTER_MAX 10
 
+#define RF_INTERFACE_DISCRETIZATION_SCALE 3
+
 #define GOKART_RF_EMERGENCY_MIN 900
 #define GOKART_RF_EMERGENCY_MAX 1900
 #define GOKART_RF_EMERGENCY_DELTA 100
@@ -89,6 +91,8 @@ namespace GoKart
       */
       //uint32_t meanBuffer(uint32_t *buffer);
 
+      uint32_t escalon(uint32_t valorAntiguo, uint32_t valorActual);
+      
       static RFInterface* _activeRF;
 
       static inline void isrMeasureCH1()
@@ -113,7 +117,7 @@ namespace GoKart
       bool updateConsistencyError(uint32_t upTimeCH1, uint32_t upTimeCH2, uint32_t upTimeCH3 );
       bool isConsistency();
 
-      void enableFilter(bool enable);
+      void enableFIRFilter(bool enable);
 
       volatile uint32_t risingTimeCH1;  //Time of front raising
       volatile uint32_t fallingTimeCH1; //Time of front falling
@@ -128,8 +132,8 @@ namespace GoKart
       volatile uint32_t upTimeCH3;      //Time of pulse CH3
 
       volatile uint8_t channelFlag;
-      //Error counter
-      uint8_t counter_error;
+      
+      uint8_t counter_error; //Error counter
 
       bool overrun;
 
@@ -142,14 +146,6 @@ namespace GoKart
 
       // Array of uptime (pulse durations)
       uint32_t uptime_[RF_INTERFACE_MAX_CH];
-
-      // Buffer filter for every channel-command
-      //uint32_t buffer_uptimeCH1[RF_INTERFACE_BUFFER_SIZE+1];
-      //uint32_t buffer_uptimeCH2[RF_INTERFACE_BUFFER_SIZE+1];
-      //uint32_t buffer_uptimeCH3[RF_INTERFACE_BUFFER_SIZE+1];
-
-      //Counter buffer
-      //uint8_t counter_buffer;
 
       bool enableFilter_;
   };

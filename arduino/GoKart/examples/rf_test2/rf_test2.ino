@@ -8,7 +8,7 @@ DataSerialization::GoKartCommand cmd;
 void setup()
 {
   Serial.begin(115200);
-  rf.enableFilter(true);
+  rf.enableFIRFilter(true);
 }
 
 void loop()
