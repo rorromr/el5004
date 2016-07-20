@@ -13,7 +13,6 @@ void setup()
 
 void loop()
 {
-  rf.update();
   rf.getCommand(cmd);
   // Print values
   Serial.print("Ch1: "); Serial.print(rf.getChannel(0));
@@ -26,12 +25,10 @@ void loop()
   Serial.print("Ch3: "); Serial.print(rf.getChannel(2));
   Serial.print(" | "); Serial.println(cmd.emergency.data);
   
+  Serial.print("overrun: "); Serial.println(rf.overrun);
+
   Serial.print("error counter: "); Serial.println(rf.counter_error);
   Serial.print("funcion update Consistency: "); Serial.println(rf.updateConsistencyError( rf.getChannel(0),  rf.getChannel(1),  rf.getChannel(2) ));
-  
-  Serial.print("flag cH1: "); Serial.println(rf.flagInterruptCH1);
-  Serial.print("flag cH2: "); Serial.println(rf.flagInterruptCH2);
-  Serial.print("flag cH3: "); Serial.println(rf.flagInterruptCH3);
   
   delay(50);
 }

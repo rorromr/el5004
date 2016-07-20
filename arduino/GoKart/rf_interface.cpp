@@ -46,9 +46,8 @@ namespace GoKart
     counter_buffer= 0;
     counter_error= RF_INTERFACE_ERROR_COUNTER_MAX*2;
 
-    flagInterruptCH1=false;
-    flagInterruptCH2=false;
-    flagInterruptCH3=false;
+    channelFlag = 0U;
+    overrun = false;
 
   }
 
@@ -72,8 +71,9 @@ namespace GoKart
     {
       fallingTimeCH1 = micros();  //get time of pulse going up
       upTimeCH1 = fallingTimeCH1 - risingTimeCH1;  //measure time between down and up
-      flagInterruptCH1=true;
+      channelFlag |= 1U;
     }
+    
   }
 
   void RFInterface::measureCH2()
@@ -86,8 +86,9 @@ namespace GoKart
     {
       fallingTimeCH2 = micros();  //get time of pulse going up
       upTimeCH2 = fallingTimeCH2 - risingTimeCH2;  //measure time between down and up
-      flagInterruptCH2=true;
+      channelFlag |= 1U << 1U;
     }
+    
   }
 
   void RFInterface::measureCH3()
@@ -100,8 +101,10 @@ namespace GoKart
     {
       fallingTimeCH3 = micros();  //get time of pulse going up
       upTimeCH3 = fallingTimeCH3 - risingTimeCH3;  //measure time between down and up
-      flagInterruptCH3=true;
+      channelFlag |= 1U << 2U;
+      
     }
+    
   }
 
   void RFInterface::enableFilter(bool enable)
@@ -143,44 +146,21 @@ namespace GoKart
     return true;
   }
 
-  uint8_t RFInterface::isFlagActivated(){
-    if (flagInterruptCH1 && flagInterruptCH2 && flagInterruptCH3){
-      return 2;
-    }
-    else if(flagInterruptCH1 || flagInterruptCH2 || flagInterruptCH3){
-      return 1;
-    }
-    else{
-      return 0;  
-    }
-    
-  }
 
   void RFInterface::update()
   {
-    noInterrupts();
-    if (RFInterface::isFlagActivated()==2){
-      flagInterruptCH1=false;
-      flagInterruptCH2=false;
-      flagInterruptCH3=false;
-      interrupts();
-    }
-    else if (RFInterface::isFlagActivated()==0){
-      upTimeCH1=0UL;
-      upTimeCH2=0UL;
-      upTimeCH3=0UL;
+    cli();
+    overrun = (channelFlag != 7U);
+    sei();
 
-      uptime_[0]=0UL;
-      uptime_[1]=0UL;
-      uptime_[2]=0UL;
+    if (overrun) return;
 
-      interrupts();
-    }
-    else{
-      interrupts();
-      return;
-    }
-    
+    cli();
+    channelFlag = 0U;
+    sei();
+
+
+
 
     //Analizar consistencia de datos y aumentar/disminuir contador
     bool current_consistency= RFInterface::updateConsistencyError(upTimeCH1,upTimeCH2,upTimeCH3 );

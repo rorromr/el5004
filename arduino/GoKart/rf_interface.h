@@ -112,27 +112,26 @@ namespace GoKart
 
       bool updateConsistencyError(uint32_t upTimeCH1, uint32_t upTimeCH2, uint32_t upTimeCH3 );
       bool isConsistency();
-      uint8_t isFlagActivated();
 
       void enableFilter(bool enable);
 
       volatile uint32_t risingTimeCH1;  //Time of front raising
       volatile uint32_t fallingTimeCH1; //Time of front falling
       volatile uint32_t upTimeCH1;      //Time of pulse CH1
-      volatile bool flagInterruptCH1;      //flag interruption CH1
 
       volatile uint32_t risingTimeCH2;  //Time of front raising
       volatile uint32_t fallingTimeCH2; //Time of front falling
       volatile uint32_t upTimeCH2;      //Time of pulse CH2
-      volatile bool flagInterruptCH2;      //flag interruption CH2
 
       volatile uint32_t risingTimeCH3;  //Time of front raising
       volatile uint32_t fallingTimeCH3; //Time of front falling
       volatile uint32_t upTimeCH3;      //Time of pulse CH3
-      volatile bool flagInterruptCH3;      //flag interruption CH3
 
+      volatile uint8_t channelFlag;
       //Error counter
       uint8_t counter_error;
+
+      bool overrun;
 
     private:
       // Total number of channels
@@ -151,9 +150,6 @@ namespace GoKart
 
       //Counter buffer
       uint8_t counter_buffer;
-
-      
-      
 
       bool enableFilter_;
   };
