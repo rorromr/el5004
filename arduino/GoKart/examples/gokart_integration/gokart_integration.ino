@@ -32,10 +32,12 @@ void loop()
     Serial.println("ON EMERGENCY!");
     delay(100);
     gokart.updateCommand();
+    gokart.lcd.printMenu(&gokart.cmd_);
   }
 
   // Set actuators
   gokart.setCommand();
+  gokart.lcd.printMenu(&gokart.cmd_);
 
   /*
    * AVOID TO USE PRINT IN MAIN LOOP!

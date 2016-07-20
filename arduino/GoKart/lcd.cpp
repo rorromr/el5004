@@ -296,18 +296,15 @@ namespace GoKart
 
     keypad.update();
     ButtonStateUnion keys = keypad.getRising();
-    Serial.println(keys.value);
     switch (keys.value)
     {
       case BTN_UP:
         menuSelected_ = (menuSelected_+1U) > 2U ? 0U : (menuSelected_+1U);
         lcd_.clear();
-        Serial.println("up");
         break;
       case BTN_DOWN:
         menuSelected_ = menuSelected_ > 0 ? (menuSelected_-1U) : 2U;
         lcd_.clear();
-        Serial.println("down");
         break;
     }
 
