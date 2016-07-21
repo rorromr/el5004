@@ -143,6 +143,8 @@ namespace GoKart
 
       void printTest(void *data);
 
+      void print(const char* message);
+
       void clear();
 
       typedef void (*printMenuFcn)(void *data);

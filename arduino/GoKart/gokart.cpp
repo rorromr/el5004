@@ -73,6 +73,15 @@ namespace GoKart
 
   void GoKartHW::setCommand()
   {
+    uint32_t actual_time = millis();
+
+    if (actual_time - cmd_.stamp.data > GOKART_TIMESTAMP_TIMEOUT){
+      GoKartHW::setEmergencyState();
+      lcd.clear();
+      lcd.print("ON EMERGENCY!!!");
+      return;
+    }
+
     // Set steering wheel command
     sw.move(cmd_.stwheel.data);
     // Set brake command

@@ -17,6 +17,8 @@
 #define GOKART_THROTTLE_ID 2
 #define GOKART_STEERINGWHEEL_ID 1
 
+#define GOKART_TIMESTAMP_TIMEOUT 1000
+
 namespace GoKart
 {
   class GoKartHW

@@ -286,6 +286,10 @@ namespace GoKart
     }
   }
 
+  void LCD::print(const char* message){
+    lcd_.print(message);
+  }
+
   void LCD::printMenu(void *data)
   {
     static uint32_t last_call = 0UL;
