@@ -75,10 +75,10 @@ namespace GoKart
   {
     uint32_t actual_time = millis();
 
-    if (actual_time - cmd_.stamp.data > GOKART_TIMESTAMP_TIMEOUT){
+    if ((actual_time - cmd_.stamp.data)> GOKART_TIMESTAMP_TIMEOUT){
       GoKartHW::setEmergencyState();
       lcd.clear();
-      lcd.print("ON EMERGENCY!!!");
+      lcd.print2("ON EMERGENCY!!!");
       return;
     }
 

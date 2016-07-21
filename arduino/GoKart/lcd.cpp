@@ -286,7 +286,7 @@ namespace GoKart
     }
   }
 
-  void LCD::print(const char* message){
+  void LCD::print2(const char* message){
     lcd_.print(message);
   }
 

@@ -143,7 +143,7 @@ namespace GoKart
 
       void printTest(void *data);
 
-      void print(const char* message);
+      void print2(const char* message);
 
       void clear();
 
