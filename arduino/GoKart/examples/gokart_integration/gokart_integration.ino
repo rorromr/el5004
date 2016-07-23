@@ -11,9 +11,6 @@ void setup()
 {
   Serial.begin(115200);
   Dynamixel.begin(GOKART_DXL_BAUDRATE, GOKART_DXL_CTRL_PIN);
-  gokart.lcd.clear();
-  gokart.lcd.print2("GoKart Init");
-  delay(500);
   // Check GoKart components
   while(!gokart.init())
   {
