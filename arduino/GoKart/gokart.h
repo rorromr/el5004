@@ -61,6 +61,7 @@ namespace GoKart
       Throttle thr;
       SteeringWheel sw;
       LCD lcd;
+      uint8_t status_;
 
   };
 }

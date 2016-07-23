@@ -6,7 +6,8 @@ namespace GoKart
     dxl_(&dxl),
     brake(dxl, GOKART_BRAKE_ID),
     thr(dxl, GOKART_THROTTLE_ID),
-    sw(dxl, GOKART_STEERINGWHEEL_ID)
+    sw(dxl, GOKART_STEERINGWHEEL_ID),
+    status_(0U)
   {
     setCommunication(com);
   }
@@ -41,8 +42,16 @@ namespace GoKart
     if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Fail to add throttle servo to LCD");
     result = lcd.addServo(&sw, "SW");
     if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Fail to add stwheel servo to LCD");
-    // @TODO Hardcoded return
+    
     DEBUG_PRINTLN_NAMED("GoKart/init", "GoKart init exit");
+    // LCD print result
+    lcd.clear();
+    lcd.print("GoKart init");
+    lcd.setCursor(5,1);
+    if (result) lcd.print("[OK]");
+    else lcd.print("[FAIL]");
+    
+    // @TODO Hardcoded return
     return true;
   }
 
@@ -77,8 +86,10 @@ namespace GoKart
 
     if ((actual_time - cmd_.stamp.data)> GOKART_TIMESTAMP_TIMEOUT){
       GoKartHW::setEmergencyState();
+      status_ = 1U;
       lcd.clear();
-      lcd.print2("ON EMERGENCY!!!");
+      lcd.print("Commad timeout");
+      delay(1000);
       return;
     }
 

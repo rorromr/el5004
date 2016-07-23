@@ -143,7 +143,9 @@ namespace GoKart
 
       void printTest(void *data);
 
-      void print2(const char* message);
+      void print(const char* message);
+
+      void setCursor(uint8_t col, uint8_t row);
 
       void clear();
 

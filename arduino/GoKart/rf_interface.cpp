@@ -35,9 +35,9 @@ namespace GoKart
     uptime_[1] = 0UL;
     uptime_[2] = 0UL;
 
-    enableFilter_=true;
+    enableFilter_ = true;
 
-    counter_error= RF_INTERFACE_ERROR_COUNTER_MAX*2;
+    counter_error = 0U;
 
     channelFlag = 0U;
     overrun = false;
