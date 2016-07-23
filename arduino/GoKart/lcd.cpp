@@ -292,6 +292,8 @@ namespace GoKart
     if (millis()-last_call<100) return;
     last_call = millis();
     
+    if (millis()-last_call<2000) lcd_.clear();
+
     if (servoCount_ == 0U) return;
 
     keypad.update();
@@ -325,6 +327,16 @@ namespace GoKart
   void LCD::clear()
   {
     lcd_.clear();
+  }
+
+  void LCD::print(const char* message)
+  {
+    lcd_.print(message);
+  }
+
+  void LCD::setCursor(uint8_t col, uint8_t row)
+  {
+    lcd_.setCursor(col, row);
   }
 
 }
