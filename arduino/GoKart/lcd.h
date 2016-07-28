@@ -141,6 +141,8 @@ namespace GoKart
 
       void printMotorConfig(void *data);
 
+      void printMotorSpeedConfig(void *data);
+
       void printTest(void *data);
 
       void print(const char* message);

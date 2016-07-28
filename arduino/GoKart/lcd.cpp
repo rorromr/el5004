@@ -286,6 +286,71 @@ namespace GoKart
     }
   }
 
+  void LCD::printMotorSpeedConfig(void *data)
+  {
+    if (servoCount_ == 0U) return;
+    
+    // Update potenciometer value
+    updatePot();
+    
+    // Map values
+    uint16_t swSpeed = 1023U - potPos_;
+    uint16_t brakeSpeed = 1023U - potCW_;
+    uint16_t thrSpeed = 1023U - potCCW_;
+
+    // First row: Name and position
+    lcd_.setCursor(0, 0);
+    lcd_.print("SPD");
+    lcd_.setCursor(5, 0);
+    lcd_.print("SW:");
+    lcd_.setCursor(9, 0);
+    lcd_.print("    ");
+    lcd_.setCursor(9, 0);
+    lcd_.print(swSpeed);
+    // Second row: CW and CCW limit
+    lcd_.setCursor(0, 1);
+    lcd_.print("BK:");
+    lcd_.setCursor(3, 1);
+    lcd_.print("    ");
+    lcd_.setCursor(3, 1);
+    lcd_.print(brakeSpeed);
+    lcd_.setCursor(8, 1);
+    lcd_.print("TH:");
+    lcd_.setCursor(12, 1);
+    lcd_.print("    ");
+    lcd_.setCursor(12, 1);
+    lcd_.print(thrSpeed);
+
+    // Read button
+    ButtonStateUnion keys = keypad.getRising();
+
+    if (keys.button.BIT_SELECT)
+    {
+      uint16_t result;
+      lcd_.clear();
+      lcd_.setCursor(0, 0);
+      lcd_.print("Speed setting");
+      delay(500);
+      lcd_.clear();
+      lcd_.setCursor(0, 0);
+
+      if (servoCount_ == 3)
+      {
+        // Right order depend on init!
+        servoInfo_[0].servo->setSpeed(brakeSpeed);
+        servoInfo_[1].servo->setSpeed(thrSpeed);
+        servoInfo_[2].servo->setSpeed(swSpeed);
+        lcd_.print("Done!");
+      }
+      else
+      {
+        lcd_.print("Fail!");
+      }
+      delay(500);
+      lcd_.clear();
+    }
+  }
+
   void LCD::printMenu(void *data)
   {
     static uint32_t last_call = 0UL;
@@ -301,25 +366,28 @@ namespace GoKart
     switch (keys.value)
     {
       case BTN_UP:
-        menuSelected_ = (menuSelected_+1U) > 2U ? 0U : (menuSelected_+1U);
+        menuSelected_ = (menuSelected_+1U) > 3U ? 0U : (menuSelected_+1U);
         lcd_.clear();
         break;
       case BTN_DOWN:
-        menuSelected_ = menuSelected_ > 0 ? (menuSelected_-1U) : 2U;
+        menuSelected_ = menuSelected_ > 0 ? (menuSelected_-1U) : 3U;
         lcd_.clear();
         break;
     }
 
     switch(menuSelected_)
     {
-      case 0:
+      case 0U:
         printCommand(data);
         break;
-      case 1:
+      case 1U:
         printMotorInfo(data);
         break;
-      case 2:
+      case 2U:
         printMotorConfig(data);
+        break;
+      case 3U:
+        printMotorSpeedConfig(data);
         break;
     }
   }
