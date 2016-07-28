@@ -10,14 +10,14 @@ namespace GoKart
 
   bool Throttle::init()
   {
-    return DxlServo::init(GOKART_THROTTLE_CW_ENCODER, GOKART_THROTTLE_CCW_ENCODER, GOKART_THROTTLE_CENTER_ENCODER);
+    return DxlServo::init(GOKART_THROTTLE_CW_ENCODER, GOKART_THROTTLE_CCW_ENCODER, GOKART_THROTTLE_CENTER_ENCODER, GOKART_THROTTLE_DEFAULT_SPEED);
   }
 
   void Throttle::move(const uint8_t pos_target)
   {
     // Map values
     int16_t encoder_target = min_ + ((int16_t) (GOKART_THROTTLE_COMMAND_FACTOR * max_ * pos_target));
-    dxl_->moveSpeed(id_, encoder_target, GOKART_THROTTLE_DEFAULT_SPEED);
+    dxl_->moveSpeed(id_, encoder_target, speed_);
   }
     
   void Throttle::full()

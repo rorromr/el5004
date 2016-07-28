@@ -14,11 +14,12 @@ namespace GoKart
     }
   }
 
-  bool DxlServo::init(const uint16_t min, const uint16_t max, const uint16_t zero)
+  bool DxlServo::init(const uint16_t min, const uint16_t max, const uint16_t zero, const uint16_t speed)
   {
     min_ = min;
     max_ = max;
     zero_ = zero;
+    speed_ = speed;
 
     if (!dxl_)
     {
@@ -42,9 +43,9 @@ namespace GoKart
     return true;
   }
 
-  void DxlServo::move(const int16_t pos_target, const int16_t vel_target)
+  void DxlServo::move(const int16_t pos_target, const int16_t speed_target)
   {
-    dxl_->moveSpeed( id_, pos_target, vel_target);
+    dxl_->moveSpeed( id_, pos_target, speed_target);
   }
 
   int16_t DxlServo::getPosition()
@@ -85,6 +86,12 @@ namespace GoKart
   int16_t DxlServo::getLoad()
   {
     return dxl_->readLoad(id_);
+  }
+
+  int16_t DxlServo::setSpeed(uint16_t speed)
+  {
+    speed_ = speed > 1023 ? 1023 : speed;
+    return 0;
   }
 
 

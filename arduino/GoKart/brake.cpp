@@ -10,14 +10,14 @@ namespace GoKart
 
   bool Brake::init()
   {
-    return DxlServo::init(GOKART_BRAKE_CW_ENCODER, GOKART_BRAKE_CCW_ENCODER, GOKART_BRAKE_CENTER_ENCODER);
+    return DxlServo::init(GOKART_BRAKE_CW_ENCODER, GOKART_BRAKE_CCW_ENCODER, GOKART_BRAKE_CENTER_ENCODER, GOKART_BRAKE_DEFAULT_SPEED);
   }
 
   void Brake::move(const uint8_t pos_target)
   {
     // Map values
     int16_t encoder_target = min_ + ((int16_t) (GOKART_BRAKE_COMMAND_FACTOR * max_ * pos_target));
-    dxl_->moveSpeed(id_, encoder_target, GOKART_BRAKE_DEFAULT_SPEED);
+    dxl_->moveSpeed(id_, encoder_target, speed_);
   }
     
   void Brake::full()

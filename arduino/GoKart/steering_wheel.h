@@ -33,11 +33,6 @@ namespace GoKart
 
       void center();
 
-      void setSpeed(const uint16_t speed);
-
-    private:
-      uint16_t speed_;
-
   };
 }
 

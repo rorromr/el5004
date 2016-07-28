@@ -43,14 +43,14 @@ namespace GoKart
   
       DxlServo(DynamixelClass& dxl, const uint8_t id);
   
-      virtual bool init(const uint16_t min, const uint16_t max, const uint16_t zero);
+      virtual bool init(const uint16_t min, const uint16_t max, const uint16_t zero, const uint16_t speed);
 
       virtual bool init()
       {
         return true;
       }
 
-      void move(const int16_t pos_target, const int16_t vel_target = DXL_SERVO_DEFAULT_SPEED);
+      void move(const int16_t pos_target, const int16_t speed_target = DXL_SERVO_DEFAULT_SPEED);
 
       int16_t getPosition();
 
@@ -61,6 +61,8 @@ namespace GoKart
       int16_t setCCWLimit(uint16_t limit);
 
       int16_t setCWLimit(uint16_t limit);
+
+      int16_t setSpeed(uint16_t speed);
 
       int16_t torqueEnable(bool torque_enable);
 
@@ -82,6 +84,8 @@ namespace GoKart
       uint16_t max_;
       // Zero position
       uint16_t zero_;
+      // Speed
+      uint16_t speed_;
 
       // Error status
       hw_status status_;

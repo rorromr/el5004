@@ -3,15 +3,14 @@
 namespace GoKart
 {
   SteeringWheel::SteeringWheel(DynamixelClass& dxl, const uint8_t id):
-    DxlServo(dxl,id),
-    speed_(GOKART_SW_DEFAULT_SPEED)
+    DxlServo(dxl,id)
   {
     ;
   }
 
   bool SteeringWheel::init()
   {
-    return DxlServo::init(GOKART_SW_CW_ENCODER, GOKART_SW_CCW_ENCODER, GOKART_SW_CENTER_ENCODER);
+    return DxlServo::init(GOKART_SW_CW_ENCODER, GOKART_SW_CCW_ENCODER, GOKART_SW_CENTER_ENCODER, GOKART_SW_DEFAULT_SPEED);
   }
   
   void SteeringWheel::move(const int8_t pos_target)
@@ -24,11 +23,6 @@ namespace GoKart
   void SteeringWheel::center()
   {
     dxl_->moveSpeed( id_, GOKART_SW_CENTER_ENCODER, GOKART_SW_DEFAULT_SPEED);
-  }
-
-  void SteeringWheel::setSpeed(const uint16_t speed)
-  {
-    speed_ = speed > 1023 ? 1023 : speed;
   }
 
 }
