@@ -1,0 +1,60 @@
+% Figura
+\begin{figure}[H]
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{/img/msg}
+	\caption{Mensaje para modular usando FM.}
+	\label{msg}
+\end{center}
+\end{figure}
+
+% Subfigura 1x2
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+            \includegraphics[width=\textwidth]{sin_filtro.png}
+            \caption{Señal original.}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[b]{0.45\textwidth}
+            \includegraphics[width=\textwidth]{filtrada.png}
+            \caption{Señal filtrada.}
+    \end{subfigure}
+    \caption{Efectos de los filtros implementados.}
+\end{figure}
+
+
+% Subfigura 1x3
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+            \includegraphics[width=\textwidth]{k4.png}
+            \caption{4 \textit{clusters}.}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[b]{0.3\textwidth}
+            \includegraphics[width=\textwidth]{k5.png}
+            \caption{5 \textit{clusters}.}
+    \end{subfigure}
+    ~ 
+    \begin{subfigure}[b]{0.3\textwidth}
+            \includegraphics[width=\textwidth]{k6.png}
+            \caption{6 \textit{clusters}.}
+    \end{subfigure}
+    \caption{Gráficos de silueta para distintos números de \textit{clusters}.}\label{fig-multi-sil}
+\end{figure}
+
+% Arreglo de ecuaciones
+\begin{eqnarray}
+T &=& 1.5(t_2 - t_1) \\
+L  &=& 1.5(t_1 - \frac{1}{3}t2)
+\end{eqnarray}
+
+% Lista
+\begin{itemize}
+\item Filtros
+\item Normalización
+\end{itemize}
+
+% Poner codigo fuente, guardar en carpeta src
+\lstinputlisting[label=matlab-coef,caption=Códigos de calculo de parámetros.]{src/coef.m}
+

@@ -1,0 +1,19 @@
+\section{Software}
+El software que ejecuta el microcontrolador para comunicar la radio transmisora y los actuadores en el auto se realizó utilizando un modelo de comunicación robusto, que garantizara el correcto funcionamiento del auto, activara rápidamente los casos de emergencia y ofreciera fácilmente una forma de comunicar la información al usuario del auto a través de una pantalla LCD (ver Sección 3.3).
+
+Dado que el el \textit{toolchain} AVR GCC, usado para compilar el código para el microcontrolador, soporta el lenguaje C++, se hace en uso extensivo de programación orientada a objetos. Los elementos principales dentro del software (clases dentro del código) se detallan a continuación:
+\begin{itemize}
+    \item{\textbf{GoKartHW:}} Es el objeto principal o cerebro del código, al inicializarlo se inician los objetos que caracterizan los actuadores, la comunicación con el transmisor y con el LCD. También maneja el estado de emergencia, que implica detener frenar el auto y dejarlo con dirección hacia el centro.
+    \item{\textbf{Dxl servo:}} Es el objeto encargado de la comunicación con los motores Dynamixel y configura los parámetros de velocidad, torque y posiciones mínimas y máximas que tienen actuadores. Estos objetos heredan de esta clase: 
+    \begin{enumerate}
+        \item{\textbf{Throttle:} Es el objeto que representa al actuador del acelerador y configura sus parámetros acorde a las características físicas de ese actuador en el montaje.}
+        \item{\textbf{Brake:} Es el objeto que representa al actuador del freno y configura sus parámetros acorde a las características físicas de ese actuador en el montaje.}
+        \item{\textbf{Steering Wheel:} Es el objeto que representa al actuador ligado al manubrio y configura sus parámetros acorde a las características físicas de ese actuador en el montaje.}
+    \end{enumerate}
+    
+    \item{\textbf{RFInterface:} Es el objeto que controla el proceso de lectura de datos del receptor desde el transmisor RF. Este objeto recibe estos datos, los valida (según una configuración propia) y mapea hacia los actuadores. En caso de que los datos estén corruptos o no se estén recibiendo, entonces comanda al Gokart al estado de emergencia.}
+    \item{\textbf{LCD:} Es el objeto que controla la pantalla LCD, su escritura y la forma en que se muestren y limpien los datos en la pantalla. Por tanto, a través de este objeto el Gokart envía los mensajes de los procesos que desee mostrar.}
+\end{itemize}
+
+Se ha hecho uso de herramientas de control de versiones e integración continua para el desarrollo de software de forma colaborativa. Esto permite que, de forma automatizada, cada aporte sea validado antes de su integración en el desarrollo principal.
+

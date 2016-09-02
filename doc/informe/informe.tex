@@ -1,0 +1,90 @@
+\documentclass[11pt,letterpaper,notitlepage]{article}
+
+% Codificacion Windows
+%\usepackage[latin1]{inputenc}
+%\usepackage[spanish]{babel}
+
+% Codificación GNU/Linux
+\usepackage[utf8]{inputenc}
+\usepackage[activeacute,spanish,es-tabla]{babel}
+
+% Margenes
+\usepackage{anysize}
+\marginsize{2cm}{2cm}{2cm}{2cm}
+
+% Estilo de pagina
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[l]{\small EL5004 - Taller de Diseño}
+\fancyhead[r]{\includegraphics[scale=0.5]{fcfm}}
+
+% Simbolos y letras para matemáticas
+\usepackage{amssymb,amsmath,amsfonts}
+
+% Colores
+\usepackage{color}
+\definecolor{rojo}{RGB}{255,26,34}
+\definecolor{gris}{RGB}{104,108,113}
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+% Elementos Flotantes (Figuras y Tablas)
+
+\usepackage{graphicx}
+\graphicspath{ {img/} }
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage[binary-units=true]{siunitx}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[numbered,framed]{mcode} %Código MATLAB
+\hypersetup{
+    colorlinks,
+    linkcolor={gris},
+    citecolor={gris},
+    urlcolor={gris}
+}
+%Codigo fuente
+
+\usepackage{listings}
+\setlength{\headheight}{30pt} 
+
+
+% Linea
+\newcommand{\HRule}{\rule{\linewidth}{.4mm}}
+\renewcommand{\lstlistingname}{Código fuente}
+\renewcommand{\lstlistlistingname}{Indice de códigos fuente}
+
+\input{portada}
+
+\begin{document}
+
+\portada{Diseño de actuación y teleoperación de vehículo tipo Gokart}{Informe de Avance}
+
+\newpage
+\thispagestyle{empty}
+\tableofcontents
+\newpage
+
+\vspace*{-0.8cm}
+
+\input{introduccion.tex}
+
+\input{diseno_mecanico.tex}
+
+\input{diseno_electrico.tex}
+
+\input{software.tex}
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{bibliografia}
+
+
+\end{document}
