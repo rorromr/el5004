@@ -11,7 +11,6 @@ void setup()
 {
   Serial.begin(115200);
   Dynamixel.begin(GOKART_DXL_BAUDRATE, GOKART_DXL_CTRL_PIN);
-  
   // Check GoKart components
   while(!gokart.init())
   {
@@ -29,13 +28,15 @@ void loop()
   while(gokart.isEmergency())
   {
     gokart.setEmergencyState();
-    Serial.println("ON EMERGENCY!");
+    Serial.println("ON EMERGENCY");
     delay(100);
     gokart.updateCommand();
+    gokart.lcd.printMenu(&gokart.cmd_);
   }
 
   // Set actuators
   gokart.setCommand();
+  gokart.lcd.printMenu(&gokart.cmd_);
 
   /*
    * AVOID TO USE PRINT IN MAIN LOOP!

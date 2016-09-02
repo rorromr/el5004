@@ -30,7 +30,7 @@ namespace GoKart
        * @brief Update command.
        * Usually you call this method in your control loop.
        */
-      virtual void update();
+      virtual bool update();
 
       void process(uint8_t data);
 

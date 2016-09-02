@@ -1,4 +1,4 @@
-/**
+ /**
  * @brief RF Interface with 2.4 GHz receiver
  * @author Matias Silva, Sebastián Piña, Rodrigo Muñoz
  * @date 2016
@@ -24,12 +24,16 @@
 #define GOKART_RF_CH3_PIN 20
 #define RF_INTERFACE_MAX_CH 8
 
-#define RF_INTERFACE_BUFFER_SIZE 10
-#define RF_INTERFACE_BUFFER_NEW_VALUE_WEIGHT 0.2
+//#define RF_INTERFACE_BUFFER_SIZE 10
+#define RF_INTERFACE_FIR_NEW_VALUE_WEIGHT 0.2
 
+#define RF_INTERFACE_ERROR_COUNTER_MAX 10
+
+#define RF_INTERFACE_DISCRETIZATION_SCALE 3
 
 #define GOKART_RF_EMERGENCY_MIN 900
 #define GOKART_RF_EMERGENCY_MAX 1900
+#define GOKART_RF_EMERGENCY_DELTA 100
 
 #define GOKART_RF_STWHEEL_MIN 990
 #define GOKART_RF_STWHEEL_MAX 1965
@@ -50,7 +54,7 @@ namespace GoKart
       * @brief Update all channels.
       * Usually you call this method in your control loop.
       */
-      void update();
+      bool update();
 
       /**
       * @brief Get last channel uptime.
@@ -85,8 +89,10 @@ namespace GoKart
       * @param buffer Buffer pointer.
       * @return mean of the buffer.
       */
-      uint32_t meanBuffer(uint32_t *buffer);
+      //uint32_t meanBuffer(uint32_t *buffer);
 
+      uint32_t escalon(uint32_t valorAntiguo, uint32_t valorActual);
+      
       static RFInterface* _activeRF;
 
       static inline void isrMeasureCH1()
@@ -104,13 +110,14 @@ namespace GoKart
         _activeRF->measureCH3();
       }
 
-      uint32_t getTimer2();
-
       void measureCH1();
       void measureCH2();
       void measureCH3();
 
-      void enableFilter(bool enable);
+      bool updateConsistencyError(uint32_t upTimeCH1, uint32_t upTimeCH2, uint32_t upTimeCH3 );
+      bool isConsistency();
+
+      void enableFIRFilter(bool enable);
 
       volatile uint32_t risingTimeCH1;  //Time of front raising
       volatile uint32_t fallingTimeCH1; //Time of front falling
@@ -124,7 +131,11 @@ namespace GoKart
       volatile uint32_t fallingTimeCH3; //Time of front falling
       volatile uint32_t upTimeCH3;      //Time of pulse CH3
 
-      volatile uint32_t timer2OVF;      //Timer2 overflow count
+      volatile uint8_t channelFlag;
+      
+      uint8_t counter_error; //Error counter
+
+      bool overrun;
 
     private:
       // Total number of channels
@@ -135,14 +146,6 @@ namespace GoKart
 
       // Array of uptime (pulse durations)
       uint32_t uptime_[RF_INTERFACE_MAX_CH];
-
-      // Buffer filter for every channel-command
-      uint32_t buffer_uptime0[RF_INTERFACE_BUFFER_SIZE+1];
-      uint32_t buffer_uptime1[RF_INTERFACE_BUFFER_SIZE+1];
-      uint32_t buffer_uptime2[RF_INTERFACE_BUFFER_SIZE+1];
-
-      //Counter buffer
-      uint8_t counter_buffer;
 
       bool enableFilter_;
   };

@@ -48,15 +48,77 @@ namespace GoKart
 
   typedef enum
   {
-    BTN_NONE   = 0U,
-    BTN_UP     = 1U,
-    BTN_LEFT   = 2U,
-    BTN_RIGHT  = 3U,
-    BTN_DOWN   = 4U,
-    BTN_SELECT = 5U
+    BTN_NONE   = 1U << 0U,
+    BTN_UP     = 1U << 1U,
+    BTN_LEFT   = 1U << 2U,
+    BTN_RIGHT  = 1U << 3U,
+    BTN_DOWN   = 1U << 4U,
+    BTN_SELECT = 1U << 5U
   } ButtonState;
 
-  
+  typedef struct ButtonBit_
+  {
+    uint8_t BIT_NONE  : 1;
+    uint8_t BIT_UP    : 1;
+    uint8_t BIT_LEFT  : 1;
+    uint8_t BIT_RIGHT : 1;
+    uint8_t BIT_DOWN  : 1;
+    uint8_t BIT_SELECT: 1;
+    uint8_t BIT_B6 : 1;
+    uint8_t BIT_B7 : 1;
+  } ButtonBit;
+
+  typedef union ButtonStateUnion_
+  {
+  	uint8_t value;
+    ButtonBit button;
+  } ButtonStateUnion;
+    
+  class Keypad
+  {
+    public:
+      Keypad(uint8_t buttonPin);
+
+      void update();
+
+      ButtonState getPressedButton();
+
+      inline ButtonStateUnion getPressed()
+      {
+        return current_;
+      }
+
+      inline ButtonStateUnion getRising()
+      {
+        return rising_;
+      }
+
+      inline ButtonStateUnion getFalling()
+      {
+        return falling_;
+      }
+
+      inline bool pressed(const ButtonState btn)
+      {
+        return rising_.value == btn;
+      }
+
+      inline bool rising(const ButtonState btn)
+      {
+        return rising_.value == btn;
+      }
+
+      inline bool falling(const ButtonState btn)
+      {
+        return falling_.value == btn;
+      }
+    
+    private:
+      uint8_t pin_;
+      ButtonStateUnion current_;
+      ButtonStateUnion rising_;
+      ButtonStateUnion falling_;
+  };
 
   class LCD
   {
@@ -81,6 +143,10 @@ namespace GoKart
 
       void printTest(void *data);
 
+      void print(const char* message);
+
+      void setCursor(uint8_t col, uint8_t row);
+
       void clear();
 
       typedef void (*printMenuFcn)(void *data);
@@ -90,14 +156,31 @@ namespace GoKart
       uint8_t servoCount_;
       uint8_t servoSelected_;
       ServoInfo servoInfo_[GO_KART_LCD_MAX_SERVO];
+      // Keypad
+      Keypad keypad;
       // Potenciometer value
       uint16_t potPos_;
       uint16_t potCW_;
       uint16_t potCCW_;
       uint8_t menuSelected_;
-
-
   };
+
+  class LCDMenu
+  {
+    public:
+      LCDMenu(LiquidCrystal &lcd):
+        lcd_(&lcd)
+      {
+      }
+
+      virtual void printStatic() = 0;
+
+      virtual void print() = 0;
+
+    private:
+      LiquidCrystal *lcd_;
+  };
+
 }
 
 #endif

@@ -18,9 +18,9 @@ namespace GoKart
   {
     public:
 
-    	virtual void update() = 0;
+      virtual bool update() = 0;
 
-    	virtual void getCommand(DataSerialization::GoKartCommand& cmd) = 0;
+      virtual void getCommand(DataSerialization::GoKartCommand& cmd) = 0;
 
       virtual bool init() = 0;
 

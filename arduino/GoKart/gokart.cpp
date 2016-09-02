@@ -6,7 +6,8 @@ namespace GoKart
     dxl_(&dxl),
     brake(dxl, GOKART_BRAKE_ID),
     thr(dxl, GOKART_THROTTLE_ID),
-    sw(dxl, GOKART_STEERINGWHEEL_ID)
+    sw(dxl, GOKART_STEERINGWHEEL_ID),
+    status_(0U)
   {
     setCommunication(com);
   }
@@ -18,31 +19,39 @@ namespace GoKart
     bool result = false;
     // Init brake
     result = brake.init();
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Brake bad initialization");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Brake bad initialization");
 
     // Init steering wheel
     result = sw.init();
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/SteeringWheel bad initialization");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "SteeringWheel bad initialization");
     
     // Init throttle
     result = thr.init();
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Throttle bad initialization");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Throttle bad initialization");
 
     // Init communication
     result = com_->init();
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Communication bad initialization");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Communication bad initialization");
 
     // Init LCD
     lcd.init();
     // Add servos
     result = lcd.addServo(&brake, "BR");
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Fail to add brake servo to LCD");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Fail to add brake servo to LCD");
     result = lcd.addServo(&thr, "TH");
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Fail to add throttle servo to LCD");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Fail to add throttle servo to LCD");
     result = lcd.addServo(&sw, "SW");
-    if (!result) DEBUG_PRINTLN("E/GoKart/init/Fail to add stwheel servo to LCD");
+    if (!result) ERROR_PRINTLN_NAMED("GoKart/init", "Fail to add stwheel servo to LCD");
+    
+    DEBUG_PRINTLN_NAMED("GoKart/init", "GoKart init exit");
+    // LCD print result
+    lcd.clear();
+    lcd.print("GoKart init");
+    lcd.setCursor(5,1);
+    if (result) lcd.print("[OK]");
+    else lcd.print("[FAIL]");
+    
     // @TODO Hardcoded return
-    DEBUG_PRINTLN("I/GoKart/init/GoKart init [OK]");
     return true;
   }
 
@@ -73,6 +82,17 @@ namespace GoKart
 
   void GoKartHW::setCommand()
   {
+    uint32_t actual_time = millis();
+
+    if ((actual_time - cmd_.stamp.data)> GOKART_TIMESTAMP_TIMEOUT){
+      GoKartHW::setEmergencyState();
+      status_ = 1U;
+      lcd.clear();
+      lcd.print("Commad timeout");
+      delay(1000);
+      return;
+    }
+
     // Set steering wheel command
     sw.move(cmd_.stwheel.data);
     // Set brake command

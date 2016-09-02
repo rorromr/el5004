@@ -1,5 +1,5 @@
 #include "serial_interface.h"
-#include "debug.h"
+#include "logger.h"
 
 namespace GoKart
 {
@@ -17,12 +17,13 @@ namespace GoKart
     currentCmd_.emergency.data = 0U;
   }
 
-  void SerialInterface::update()
+  bool SerialInterface::update()
   {
     while (serial_->available())
     {
       process(serial_->read());
     }
+    return true;
   }
 
   void SerialInterface::process(uint8_t data)
@@ -32,7 +33,7 @@ namespace GoKart
     if (now - lastCall_ > 100)
     {
       // Reset states
-      DEBUG_PRINTLN("W/Serial/Reset serial cmd");
+      WARN_PRINTLN_NAMED("serial_interface","Reset serial cmd");
       cmdState_ = 0U;
       cmdChecksum_ = 0U;
       cmdFinish_ = 0U;

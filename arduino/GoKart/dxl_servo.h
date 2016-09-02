@@ -13,7 +13,7 @@
 #include <DynamixelSerial1.h>
 #include <stdint.h>
 #include "error_code.h"
-#include "debug.h"
+#include "logger.h"
 
 #define DXL_SERVO_PING_ATTEMPTS 4
 #define DXL_SERVO_DEFAULT_SPEED 300

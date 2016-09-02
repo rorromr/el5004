@@ -3,6 +3,36 @@
 
 namespace GoKart
 {
+  // Keypad
+  Keypad::Keypad(uint8_t buttonPin):
+    pin_(buttonPin)
+  {
+    current_.value = BTN_NONE;
+    rising_.value = 0U;
+    falling_.value = 0U;
+  }
+
+  void Keypad::update()
+  {
+    ButtonStateUnion last = current_;
+    current_.value = getPressedButton();
+    rising_.value = (~last.value) & current_.value;
+    falling_.value = last.value & (~current_.value);
+  }
+
+  ButtonState Keypad::getPressedButton()
+  {
+    // Read the value from the sensor
+    uint16_t adc_val = analogRead(pin_);
+
+    if (adc_val > 1000U) return BTN_NONE;
+    if (adc_val < 50U)   return BTN_RIGHT;  
+    if (adc_val < 250U)  return BTN_UP; 
+    if (adc_val < 450U)  return BTN_DOWN; 
+    if (adc_val < 650U)  return BTN_LEFT; 
+    else return BTN_SELECT; //(adc_val < 850U)
+  }
+
   LCD::LCD():
     lcd_(GOKART_LCD_RS, GOKART_LCD_EN, GOKART_LCD_DB4, GOKART_LCD_DB5, GOKART_LCD_DB6, GOKART_LCD_DB7),
     servoCount_(0U),
@@ -10,7 +40,8 @@ namespace GoKart
     potPos_(0U),
     potCW_(0U),
     potCCW_(0U),
-    menuSelected_(0U)
+    menuSelected_(0U),
+    keypad(GOKART_LCD_BUTTON_PIN)
   {
   }
 
@@ -25,19 +56,6 @@ namespace GoKart
     potPos_ = analogRead(A0);
     potCW_ = analogRead(A1);
     potCCW_ = analogRead(A2);
-  }
-
-  ButtonState LCD::getButton()
-  {
-    // Read the value from the sensor
-    uint16_t adc_val = analogRead(GOKART_LCD_BUTTON_PIN);
-
-    if (adc_val > 1000U) return BTN_NONE;
-    if (adc_val < 50U)   return BTN_RIGHT;  
-    if (adc_val < 250U)  return BTN_UP; 
-    if (adc_val < 450U)  return BTN_DOWN; 
-    if (adc_val < 650U)  return BTN_LEFT; 
-    else return BTN_SELECT; //(adc_val < 850U)
   }
 
   bool LCD::addServo(DxlServo *s, const char *name)
@@ -55,7 +73,7 @@ namespace GoKart
 
   void LCD::printTest(void *data)
   {
-    ButtonState btn = getButton();
+    ButtonState btn = keypad.getPressedButton();
     updatePot();
     char btn_name[7] = "NONE  ";
     switch(btn)
@@ -92,24 +110,39 @@ namespace GoKart
     lcd_.print(btn_name);
     lcd_.setCursor(8,1);      // Move cursor to second line "1" and 9 spaces over
     lcd_.print(millis()/1000);// Display seconds elapsed since power-up
+
+    // Test rising
+    keypad.update();
+    if (keypad.rising(BTN_UP)) Serial.println("rising UP");
+    if (keypad.rising(BTN_DOWN)) Serial.println("rising DOWN");
+    if (keypad.rising(BTN_LEFT)) Serial.println("rising LEFT");
+    if (keypad.rising(BTN_RIGHT)) Serial.println("rising RIGHT");
+    if (keypad.rising(BTN_SELECT)) Serial.println("rising SELECT");
+
+    // Test raising
+    if (keypad.falling(BTN_UP)) Serial.println("falling UP");
+    if (keypad.falling(BTN_DOWN)) Serial.println("falling DOWN");
+    if (keypad.falling(BTN_LEFT)) Serial.println("falling LEFT");
+    if (keypad.falling(BTN_RIGHT)) Serial.println("falling RIGHT");
+    if (keypad.falling(BTN_SELECT)) Serial.println("falling SELECT");
   }
 
   void LCD::printMotorInfo(void *data)
   {
     if (servoCount_ == 0U) return;
 
-    ButtonState btn = getButton();
-
-    switch(btn)
+    // Read button and assign selected servo
+    ButtonStateUnion keys = keypad.getRising();
+    switch(keys.value)
     {
-      case BTN_LEFT:
-        servoSelected_ = (servoSelected_+1U) > (servoCount_-1U) ? servoSelected_ : (servoSelected_+1U);
-        break;
       case BTN_RIGHT:
-        servoSelected_ = servoSelected_ > 0U ? (servoSelected_-1U) : 0U;
+        servoSelected_ = (servoSelected_+1U) > (servoCount_-1U) ? 0U : (servoSelected_+1U);
+        break;
+      case BTN_LEFT:
+        servoSelected_ = servoSelected_ > 0U ? (servoSelected_-1U) : (servoCount_-1U);
         break;
     }
-    Serial.println(servoSelected_);
+
     ServoInfo* servo = &servoInfo_[servoSelected_];
     // Update values
     servo->pos = servo->servo->getPosition();
@@ -184,17 +217,19 @@ namespace GoKart
   {
     if (servoCount_ == 0U) return;
 
-    ButtonState btn = getButton();
-
-    switch(btn)
+    // Read button and assign selected servo
+    ButtonStateUnion keys = keypad.getRising();
+    
+    switch(keys.value)
     {
-      case BTN_LEFT:
-        servoSelected_ = (servoSelected_+1U) > (servoCount_-1U) ? servoSelected_ : (servoSelected_+1U);
-        break;
       case BTN_RIGHT:
-        servoSelected_ = servoSelected_ > 0 ? (servoSelected_-1U) : 0U;
+        servoSelected_ = (servoSelected_+1U) > (servoCount_-1U) ? 0U : (servoSelected_+1U);
+        break;
+      case BTN_LEFT:
+        servoSelected_ = servoSelected_ > 0U ? (servoSelected_-1U) : (servoCount_-1U);
         break;
     }
+
     ServoInfo* servo = &servoInfo_[servoSelected_];
     // Update values
     servo->pos = servo->servo->getPosition();
@@ -232,8 +267,7 @@ namespace GoKart
     lcd_.setCursor(12, 1);
     lcd_.print(ccw);
 
-    btn = getButton();
-    if (btn == BTN_SELECT)
+    if (keys.button.BIT_SELECT)
     {
       uint16_t result;
       lcd_.clear();
@@ -248,6 +282,7 @@ namespace GoKart
       if (result) lcd_.print("Fail!");
       else lcd_.print("Done!");
       delay(500);
+      lcd_.clear();
     }
   }
 
@@ -256,12 +291,14 @@ namespace GoKart
     static uint32_t last_call = 0UL;
     if (millis()-last_call<100) return;
     last_call = millis();
+    
+    if (millis()-last_call<2000) lcd_.clear();
 
     if (servoCount_ == 0U) return;
 
-    ButtonState btn = getButton();
-
-    switch(btn)
+    keypad.update();
+    ButtonStateUnion keys = keypad.getRising();
+    switch (keys.value)
     {
       case BTN_UP:
         menuSelected_ = (menuSelected_+1U) > 2U ? 0U : (menuSelected_+1U);
@@ -290,6 +327,16 @@ namespace GoKart
   void LCD::clear()
   {
     lcd_.clear();
+  }
+
+  void LCD::print(const char* message)
+  {
+    lcd_.print(message);
+  }
+
+  void LCD::setCursor(uint8_t col, uint8_t row)
+  {
+    lcd_.setCursor(col, row);
   }
 
 }
