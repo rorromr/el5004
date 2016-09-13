@@ -4,7 +4,7 @@
 
 Desarrollo de un sistema de actuación y teleoperación de un vehículo tipo Go Kart.
 
-<img align="right" src="https://raw.githubusercontent.com/rorromr/el5004/master/doc/presentacion.jpg" /> 
+<img align="center" src="https://raw.githubusercontent.com/rorromr/el5004/master/doc/presentacion.jpg" /> 
 
 
 Estructura:
